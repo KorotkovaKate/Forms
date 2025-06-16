@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Forms.Application\Forms.Application.csproj" />
+      <ProjectReference Include="..\Forms.Core\Forms.Core.csproj" />
+    </ItemGroup>
+
+</Project>
