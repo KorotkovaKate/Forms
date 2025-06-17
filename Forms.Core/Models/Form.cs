@@ -6,4 +6,5 @@ public class Form
     public uint TemplateId { get; set; } 
     public uint Submitter { get; set; }
     public DateTime SubmittedTime { get; set; } = DateTime.Now;
+    public List<Answer> Answers { get; set; }
 }
