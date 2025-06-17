@@ -1,6 +1,17 @@
+using Forms.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 namespace Forms.DAL.Configurations;
 
-public class CommentConfiguration
+public class CommentConfiguration: IEntityTypeConfiguration<Comment>
 {
-    
+    public void Configure(EntityTypeBuilder<Comment> builder)
+    {
+        builder.HasKey(comment => comment.Id);
+        builder.Property(comment => comment.Id).ValueGeneratedOnAdd();
+        builder.Property(comment => comment.Text).IsRequired();
+        
+        builder.HasOne(comment => comment.User).WithMany(user => user.Comments);
+    }
 }
