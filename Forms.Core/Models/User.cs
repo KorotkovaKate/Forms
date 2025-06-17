@@ -10,5 +10,8 @@ public class User
     public string PasswordHash { get; set; }
     public UserRole Role { get; set; }
     public UserStatus Status { get; set; }
+    public List<Template> Templates { get; set; }
+    public List<Form> Forms { get; set; }
     public List<Template> LikedTemplates { get; set; } 
+    public List<Comment> Comments { get; set; }
 }
