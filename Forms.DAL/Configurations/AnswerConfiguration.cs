@@ -12,7 +12,9 @@ public class AnswerConfiguration: IEntityTypeConfiguration<Answer>
         builder.Property(answer => answer.Id).ValueGeneratedOnAdd();
         builder.Property(answer => answer.Value).IsRequired();
         
-        builder.HasOne(answer => answer.Question).WithMany().HasForeignKey(answer => answer.QuestionId);
-        builder.HasOne(answer => answer.Form).WithMany(form => form.Answers);
+        builder.HasOne(answer => answer.Question).WithMany().HasForeignKey(answer => answer.QuestionId)
+            .OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(answer => answer.Form).WithMany(form => form.Answers)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

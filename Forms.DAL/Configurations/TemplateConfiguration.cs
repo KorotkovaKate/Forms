@@ -18,5 +18,7 @@ public class TemplateConfiguration: IEntityTypeConfiguration<Template>
         builder.HasOne(template => template.Creator).WithMany(user => user.Templates);
         builder.HasMany(template => template.Questions).WithOne(question => question.Template)
             .HasForeignKey(question => question.TemplateId);
+        builder.HasMany(template => template.Comments).WithOne(comment => comment.Template)
+            .HasForeignKey(comment => comment.TemplateId);
     }
 }

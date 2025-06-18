@@ -11,7 +11,8 @@ public class FormConfiguration: IEntityTypeConfiguration<Form>
         builder.HasKey(form => form.Id);
         builder.Property(form => form.Id).ValueGeneratedOnAdd();
         
-        builder.HasOne(form => form.Submitter).WithMany(user => user.Forms);
+        builder.HasOne(form => form.Submitter).WithMany(user => user.Forms)
+            .OnDelete(DeleteBehavior.NoAction);
         builder.HasOne(form => form.Template).WithMany().HasForeignKey(form => form.TemplateId);
         builder.HasMany(form => form.Answers).WithOne(answer => answer.Form)
             .HasForeignKey(answer => answer.FormId);

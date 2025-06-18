@@ -12,6 +12,9 @@ public class CommentConfiguration: IEntityTypeConfiguration<Comment>
         builder.Property(comment => comment.Id).ValueGeneratedOnAdd();
         builder.Property(comment => comment.Text).IsRequired();
         
-        builder.HasOne(comment => comment.User).WithMany(user => user.Comments);
+        builder.HasOne(comment => comment.User).WithMany(user => user.Comments)
+            .OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(comment => comment.Template).WithMany(template => template.Comments)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -12,6 +12,7 @@ public class QuestionOptionConfiguration: IEntityTypeConfiguration<QuestionOptio
         builder.Property(questionOption => questionOption.Id).ValueGeneratedOnAdd();
         builder.Property(questionOption => questionOption.Value).IsRequired();
         
-        builder.HasOne(questionOption => questionOption.Question).WithMany(question => question.Options);
+        builder.HasOne(questionOption => questionOption.Question).WithMany(question => question.Options)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
