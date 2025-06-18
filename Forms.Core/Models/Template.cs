@@ -14,4 +14,5 @@ public class Template
     public User Creator { get; set; }
     public TemplateStatus Status { get; set; }
     public List<Question> Questions { get; set; }
+    public List<Comment> Comments { get; set; }
 }
