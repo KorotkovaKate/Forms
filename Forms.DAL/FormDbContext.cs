@@ -1,4 +1,5 @@
 using Forms.Core.Models;
+using Forms.DAL.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Forms.DAL;
@@ -13,4 +14,15 @@ public class FormDbContext(DbContextOptions<FormDbContext> options): DbContext(o
     public DbSet<Answer> Answers { get; set; }
     public DbSet<Comment> Comments { get; set; }
     
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new TemplateConfiguration());
+        modelBuilder.ApplyConfiguration(new QuestionConfiguration());
+        modelBuilder.ApplyConfiguration(new QuestionOptionConfiguration());
+        modelBuilder.ApplyConfiguration(new FormConfiguration());
+        modelBuilder.ApplyConfiguration(new AnswerConfiguration());
+        modelBuilder.ApplyConfiguration(new CommentConfiguration());
+        base.OnModelCreating(modelBuilder);
+    }
 }
