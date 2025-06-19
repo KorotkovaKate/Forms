@@ -12,7 +12,10 @@ public class Template
     public List<string> Tags { get; set; }
     public uint TemplateCreatorId { get; set; }
     public User Creator { get; set; }
+    public int CountOfLikes { get; set; }
     public TemplateStatus Status { get; set; }
     public List<Question> Questions { get; set; }
+    public List<Form> Forms { get; set; }
     public List<Comment> Comments { get; set; }
+    public List<Statistic> Statistics { get; set; }
 }

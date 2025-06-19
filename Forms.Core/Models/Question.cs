@@ -10,4 +10,5 @@ public class Question
     public string Title { get; set; }
     public QuestionType Type { get; set; }
     public List<QuestionOption>? Options { get; set; }
+    public Statistic? Statistic { get; set; }
 }
