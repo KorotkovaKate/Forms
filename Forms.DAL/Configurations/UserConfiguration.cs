@@ -22,5 +22,8 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
         builder
             .HasMany(user => user.Comments).WithOne(comment => comment.User)
             .HasForeignKey(comment => comment.UserId);
+        
+        builder.HasMany(user => user.LikedTemplates).WithOne(likedTemplate => likedTemplate.User)
+            .HasForeignKey(likedTemplate => likedTemplate.UserId);
     }
 }
