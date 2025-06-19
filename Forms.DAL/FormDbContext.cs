@@ -13,6 +13,8 @@ public class FormDbContext(DbContextOptions<FormDbContext> options): DbContext(o
     public DbSet<Form> Forms { get; set; }
     public DbSet<Answer> Answers { get; set; }
     public DbSet<Comment> Comments { get; set; }
+    public DbSet<LikedTemplate>  LikedTemplates { get; set; }
+    public DbSet<Statistic>  Statistics { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,6 +25,8 @@ public class FormDbContext(DbContextOptions<FormDbContext> options): DbContext(o
         modelBuilder.ApplyConfiguration(new FormConfiguration());
         modelBuilder.ApplyConfiguration(new AnswerConfiguration());
         modelBuilder.ApplyConfiguration(new CommentConfiguration());
+        modelBuilder.ApplyConfiguration(new LikedTemplateConfiguration());
+        modelBuilder.ApplyConfiguration(new StatisticConfiguration());
         base.OnModelCreating(modelBuilder);
     }
 }
