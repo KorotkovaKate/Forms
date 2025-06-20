@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Forms.DAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b9a3cc49f218caf9a8c086d162963b04a4d170f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98bf0b463782ae45be87ff415526c66878c03e1e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Forms.DAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Forms.DAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
