@@ -6,12 +6,11 @@ namespace Forms.DAL.Repositories;
 
 public class UserRepository(FormDbContext context): IUserRepository
 {
-    public async Task<User> Authorize(string email, string passwordHash)
+    public async Task<User?> Authorize(string email, string passwordHash)
     {
         var user = await context.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(user => user.Email == email && user.PasswordHash == passwordHash);
-        if (user == null) { throw new Exception("Not found user"); }
         return user;
     }
 
