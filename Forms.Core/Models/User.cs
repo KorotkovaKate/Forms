@@ -8,8 +8,8 @@ public class User
     public string UserName { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; }
-    public UserRole Role { get; set; }
-    public UserStatus Status { get; set; }
+    public UserRole Role { get; set; } = UserRole.User;
+    public UserStatus Status { get; set; } = UserStatus.Active;
     public List<Template> Templates { get; set; }
     public List<Form> Forms { get; set; }
     public List<LikedTemplate> LikedTemplates { get; set; } 
