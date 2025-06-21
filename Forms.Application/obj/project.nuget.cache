@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "iEdUJsYuHH0=",
+  "dgSpecHash": "NqcmKgT2SAQ=",
   "success": true,
   "projectFilePath": "D:\\Itransition course\\CourseWork\\Forms\\Forms.Application\\Forms.Application.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\korot\\.nuget\\packages\\sha3.net\\2.0.0\\sha3.net.2.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
