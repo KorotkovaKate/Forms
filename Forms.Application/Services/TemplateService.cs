@@ -49,4 +49,20 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
         if (templateId == null) {throw new ArgumentException("Incorrect id");}
         return await repository.GetTemplateById(templateId.Value);
     }
+
+    public async Task IncreaseLikeNumber(uint? templateId)
+    {
+        if (templateId == null) {throw new ArgumentException("Incorrect id");}
+        Template? template = await GetTemplateById(templateId);
+        if (template == null) { throw new ArgumentException("Template not found");}
+        await repository.IncreaseLikeNumber(template);
+    }
+
+    public async Task DecreaseLikeNumber(uint? templateId)
+    {
+        if (templateId == null) {throw new ArgumentException("Incorrect id");}
+        Template? template = await GetTemplateById(templateId);
+        if (template == null) { throw new ArgumentException("Template not found");}
+        await repository.DecreaseLikeNumber(template);
+    }
 }
