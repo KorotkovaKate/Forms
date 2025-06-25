@@ -15,6 +15,14 @@ public class AnswerRepository(FormDbContext context): IAnswerRepository
             .ToListAsync();
     }
 
+    public async Task<List<Answer>> GetAnswerByQuestionId(uint questionId)
+    {
+        return await context.Answers
+            .AsNoTracking()
+            .Where(answer => answer.QuestionId == questionId)
+            .ToListAsync();
+    }
+
     public async Task AddAnswer(Answer answer)
     {
         await context.Answers.AddAsync(answer);

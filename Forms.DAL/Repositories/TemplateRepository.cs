@@ -62,4 +62,15 @@ public class TemplateRepository(FormDbContext context):ITemplateRepository
             .Include(template => template.Comments)
             .FirstOrDefaultAsync(template => template.Id == templateId);
     }
+
+    public async Task IncreaseLikeNumber(Template template)
+    {
+        template.CountOfLikes += 1;
+        await context.SaveChangesAsync();
+    }
+    public async Task DecreaseLikeNumber(Template template)
+    {
+        template.CountOfLikes -= 1;
+        await context.SaveChangesAsync();
+    }
 }

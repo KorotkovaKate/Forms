@@ -6,7 +6,7 @@ namespace Forms.DAL.Repositories;
 
 public class QuestionOptionRepository(FormDbContext context): IQuestionOptionRepository
 {
-    public async Task<List<QuestionOption>> GetOptions(uint questionId)
+    public async Task<List<QuestionOption>> GetOptionsByQuestionId(uint questionId)
     {
         return await context.QuestionOptions
             .Where(question => question.QuestionId == questionId)
@@ -32,7 +32,7 @@ public class QuestionOptionRepository(FormDbContext context): IQuestionOptionRep
         }
     }
 
-    public async Task<QuestionOption?> GetOption(uint questionOptionId)
+    public async Task<QuestionOption?> GetOptionById(uint questionOptionId)
     {
         return await context.QuestionOptions
             .FirstOrDefaultAsync(questionOption => questionOption.Id == questionOptionId);

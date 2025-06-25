@@ -14,6 +14,16 @@ public class LikedTemplateRepository(FormDbContext context): ILikedTemplateRepos
             .Select(likedTemplates => likedTemplates.Template)
             .ToListAsync();
     }
+    
+    public async Task<Template> GetLikedTemplate(uint userId, uint templateId)
+    {
+        var likedTemplate = await context.LikedTemplates
+            .Include(likedTemplates => likedTemplates.Template)
+            .FirstOrDefaultAsync(likedTemplates =>
+                likedTemplates.UserId == userId &&
+                likedTemplates.TemplateId == templateId);
+        return likedTemplate.Template;
+    }
 
     public async Task AddLikedTemplate(LikedTemplate likedTemplate)
     {
