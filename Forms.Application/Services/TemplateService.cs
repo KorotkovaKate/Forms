@@ -1,3 +1,4 @@
+using Forms.Application.DTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
@@ -28,10 +29,10 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
         await repository.DeleteTemplate(template);
     }
 
-    public async Task UpdateTemplate(uint templateId, Template template)
+    public async Task UpdateTemplate(UpdateTemplateDto  updateTemplateDto)
     {
-        if (template == null) {throw new ArgumentException("Invalid input data");}
-        await repository.UpdateTemplate(templateId, template);
+        if (updateTemplateDto.TemplateId == null) {throw new ArgumentException("Invalid input data");}
+        await repository.UpdateTemplate(updateTemplateDto.TemplateId.Value, updateTemplateDto.Template);
     }
 
     public async Task<List<Template>> GetAllPublicTemplates()

@@ -10,22 +10,22 @@ using SHA3.Net;
 
 namespace Forms.Application.Services;
 
-public class UserService(IUserRepository repository, IPasswordHasher hasher): IUserServise
+public class UserService(IUserRepository repository, IPasswordHasher hasher): IUserService
 {
-    public async Task<User?> Authorize(AutorizationDto autorizationDto)
+    public async Task<User?> Authorize(AuthorizationDto authorizationDto)
     {
-        var passwordHash = hasher.CalculateHash(autorizationDto.Password);
-        if (autorizationDto.Email == null || autorizationDto.Password == null)
+        var passwordHash = hasher.CalculateHash(authorizationDto.Password);
+        if (authorizationDto.Email == null || authorizationDto.Password == null)
         {
             throw new ArgumentNullException("Еmail or password are empty");
         }
-        var user = await repository.Authorize(autorizationDto.Email, passwordHash);
+        var user = await repository.Authorize(authorizationDto.Email, passwordHash);
         if (user == null) { throw new Exception("Not found user"); }
         if (user.Status == UserStatus.Blocked) {throw new Exception("User is blocked"); }
         return user;
     }
 
-    public async Task Register(RegistrationDto registrationDto)
+    public async Task Registrate(RegistrationDto registrationDto)
     {
         var passwordHash = hasher.CalculateHash(registrationDto.Password);
         var user = UserMapping.MapRegistrationDtoToUser(registrationDto,  passwordHash);
@@ -33,10 +33,10 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher): IU
         await repository.Registrate(user);
     }
 
-    public async Task<User?> GetUserById(uint userId)
+    public async Task<User?> GetUserById(uint? userId)
     {
-        if (userId == 0) { throw new ArgumentException("Inccorect id"); }
-        var user = await repository.GetUserById(userId);
+        if (userId == null) { throw new ArgumentException("Inccorect id"); }
+        var user = await repository.GetUserById(userId.Value);
         return user;
     }
 
