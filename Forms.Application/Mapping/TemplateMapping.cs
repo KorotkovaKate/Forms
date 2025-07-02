@@ -52,11 +52,29 @@ public class TemplateMapping
                 Id = template.Id,
                 Title = template.Title,
                 ImageUrl = template.ImageUrl,
-                CountOfLikes = template.CountOfLikes
+                CountOfLikes = template.CountOfLikes,
+                Status = template.Status
             };
             allTemplatesForAdmin.Add(templateDto);
         }
 
         return allTemplatesForAdmin;
+    }
+    public static List<GetPublicTemplateDto> GetAllPublicTemplates(List<Template> templates)
+    {
+        List<GetPublicTemplateDto> allPublicTemplates = [];
+        
+        foreach (var template in templates)
+        {
+            var templateDto = new GetPublicTemplateDto
+            {
+                Id = template.Id,
+                Title = template.Title,
+                ImageUrl = template.ImageUrl,
+                CountOfLikes = template.CountOfLikes,
+            };
+            allPublicTemplates.Add(templateDto);
+        }
+        return allPublicTemplates;
     }
 }

@@ -5,11 +5,12 @@ namespace Forms.Application.Mapping;
 
 public class QuestionOptionMapping
 {
-    public static QuestionOption AddOption(QuestionOptionDto questionOptionDto)
+    public static QuestionOption AddOption(AddOptionDto addOptionDto)
     {
         return new QuestionOption
         {
-            Value = questionOptionDto.Value
+            QuestionId = addOptionDto.QuestionId.Value,
+            Value = addOptionDto.Value
         };
     }
 }
