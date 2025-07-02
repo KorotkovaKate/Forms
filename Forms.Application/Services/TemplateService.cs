@@ -1,5 +1,6 @@
 using Forms.Application.DTOs;
 using Forms.Application.Interfaces.IServices;
+using Forms.Application.Mapping;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -7,17 +8,16 @@ namespace Forms.Application.Services;
 
 public class TemplateService(ITemplateRepository repository):ITemplateService
 {
-    public async Task CreateTemplate(Template template)
+    public async Task CreateTemplate(CreateTemplateDto createTemplateDto)
     {
-        if (template == null) { throw new ArgumentNullException(nameof(template));}
-        if (string.IsNullOrWhiteSpace(template.Title) ||
-            string.IsNullOrWhiteSpace(template.Description)
-            || template.Theme == default
-            || template.Status == default)
+        if (createTemplateDto == null) { throw new ArgumentNullException(nameof(createTemplateDto));}
+        if (string.IsNullOrWhiteSpace(createTemplateDto.Title) ||
+            string.IsNullOrWhiteSpace(createTemplateDto.Description)
+            )
         {
             throw new ArgumentException("Not all required field are filled in");
         }
-
+        var template = TemplateMapping.CreateTemplate(createTemplateDto);
         await repository.CreateTemplate(template);
     }
 
@@ -32,7 +32,8 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
     public async Task UpdateTemplate(UpdateTemplateDto  updateTemplateDto)
     {
         if (updateTemplateDto.TemplateId == null) {throw new ArgumentException("Invalid input data");}
-        await repository.UpdateTemplate(updateTemplateDto.TemplateId.Value, updateTemplateDto.Template);
+        var template = TemplateMapping.UpdateTemplate(updateTemplateDto);
+        await repository.UpdateTemplate(updateTemplateDto.TemplateId.Value, template);
     }
 
     public async Task<List<Template>> GetAllPublicTemplates()
@@ -40,9 +41,11 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
         return await repository.GetAllPublicTemplates();
     }
 
-    public async Task<List<Template>> GetAllTemplates()
+    public async Task<List<GetAllTemplatesForAdminDto>> GetAllTemplates()
     {
-        return await repository.GetAllTemplates();
+        var templates = await repository.GetAllTemplates();
+        if(templates == null) throw new Exception("Templates not found");
+        return TemplateMapping.GetAllTemplatesForAdmin(templates);
     }
 
     public async Task<Template?> GetTemplateById(uint? templateId)

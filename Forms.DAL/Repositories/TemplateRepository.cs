@@ -49,7 +49,7 @@ public class TemplateRepository(FormDbContext context):ITemplateRepository
             .ToListAsync();
     }
 
-    public async Task<List<Template>> GetAllTemplates()
+    public async Task<List<Template>?> GetAllTemplates()
     {
         return await context.Templates.AsNoTracking().ToListAsync();
     }

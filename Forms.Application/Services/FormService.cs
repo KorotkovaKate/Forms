@@ -1,4 +1,6 @@
+using Forms.Application.DTOs.FormDTOs;
 using Forms.Application.Interfaces.IServices;
+using Forms.Application.Mapping;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -6,12 +8,13 @@ namespace Forms.Application.Services;
 
 public class FormService(IFormRepository repository): IFormService 
 {
-    public async Task CreateForm(Form form)
+    public async Task CreateForm(CreateFormDto createFormDto)
     {
-        if (form == null || form.Submitter == null || form.Template == null)
+        if (createFormDto == null || createFormDto.SubmitterId == null || createFormDto.TemplateId == null)
         {
             throw new ArgumentException("Invalid form");
         }
+        var form = FormMapping.CreateForm(createFormDto);
         await repository.CreateForm(form);
     }
 

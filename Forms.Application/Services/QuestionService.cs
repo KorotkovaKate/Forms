@@ -1,4 +1,6 @@
+using Forms.Application.DTOs.QuestionDTOs;
 using Forms.Application.Interfaces.IServices;
+using Forms.Application.Mapping;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -6,13 +8,14 @@ namespace Forms.Application.Services;
 
 public class QuestionService(IQuestionRepository repository): IQuestionService
 {
-    public async Task AddQuestion(Question question)
+    public async Task AddQuestion(QuestionDto questionDto)
     {
-        if (question is null) {throw new ArgumentNullException(nameof(question));}
-        if (string.IsNullOrWhiteSpace(question.Title))
+        if (questionDto is null) {throw new ArgumentNullException(nameof(questionDto));}
+        if (string.IsNullOrWhiteSpace(questionDto.Title))
         {
             throw new ArgumentException("Incorrect question title or template id");
         }
+        var question = QuestionMapping.AddQuestion(questionDto);
         await repository.AddQuestion(question);
     }
 
