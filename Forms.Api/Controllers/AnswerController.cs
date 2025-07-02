@@ -1,3 +1,4 @@
+using Forms.Application.DTOs.AnswerDTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +9,11 @@ namespace Forms.Controllers;
 public class AnswerController(IAnswerService service): ControllerBase
 {
     [HttpPost("AddAnswer")]
-    public async Task<IActionResult> AddAnswer([FromBody] Answer answer)
+    public async Task<IActionResult> AddAnswer([FromBody] AddAnswerDto addAnswerDto)
     {
         try
         {
-            await service.AddAnswer(answer);
+            await service.AddAnswer(addAnswerDto);
             return Ok();
         }
         catch (Exception ex)

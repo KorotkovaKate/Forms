@@ -1,4 +1,5 @@
 using Forms.Application.DTOs;
+using Forms.Application.DTOs.CommentDTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,11 @@ namespace Forms.Controllers;
 public class CommentController(ICommentService service):ControllerBase
 {
     [HttpPost("AddComment")]
-    public async Task<IActionResult> AddComment([FromBody] Comment comment)
+    public async Task<IActionResult> AddComment([FromBody] AddCommentDto addCommentDto)
     {
         try
         {
-            await service.AddComment(comment);
+            await service.AddComment(addCommentDto);
             return Ok();
         }
         catch (Exception ex)
@@ -51,11 +52,11 @@ public class CommentController(ICommentService service):ControllerBase
     }
 
     [HttpPut("UpdateComment")]
-    public async Task<IActionResult> UpdateComment([FromBody] UpdateMessageDto updateMessageDto)
+    public async Task<IActionResult> UpdateComment([FromBody] UpdateCommentDto updateCommentDto)
     {
         try
         {
-            await service.UpdateComment(updateMessageDto);
+            await service.UpdateComment(updateCommentDto);
             return Ok();
         }
         catch (Exception ex)

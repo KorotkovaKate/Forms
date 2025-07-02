@@ -1,3 +1,4 @@
+using Forms.Application.DTOs.QuestionDTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -34,11 +35,11 @@ public class QuestionOptionController(IQuestionOptionService service):Controller
         }
     }
     [HttpPost("AddOption")]
-    public async Task<IActionResult> AddOption([FromBody] QuestionOption option)
+    public async Task<IActionResult> AddOption([FromBody] AddOptionDto addOptionDto)
     {
         try
         {
-            await service.AddOption(option);
+            await service.AddOption(addOptionDto);
             return Ok();
         }
         catch (Exception ex)
