@@ -21,7 +21,7 @@ public class StatisticController(IStatisticService  service): ControllerBase
         }
     }
 
-    [HttpPut("UpdateStatistic")]
+    /*[HttpPut("UpdateStatistic")]
     public async Task<IActionResult> UpdateStatistic([FromBody] UpdateStatisticDto updateStatisticDto)
     {
         try
@@ -33,8 +33,8 @@ public class StatisticController(IStatisticService  service): ControllerBase
         {
             return BadRequest(ex.Message);
         }
-    }
-
+    }*/
+    
     [HttpGet("GetStatisticsByTemplateId/{templateId}")]
     public async Task<IActionResult> GetStatisticsByTemplateId([FromRoute] uint? templateId)
     {

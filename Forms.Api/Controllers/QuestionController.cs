@@ -1,3 +1,4 @@
+using Forms.Application.DTOs.QuestionDTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +9,11 @@ namespace Forms.Controllers;
 public class QuestionController(IQuestionService service):ControllerBase
 {
     [HttpPost("AddQuestion")]
-    public async Task<IActionResult> AddQuestion([FromBody] Question question)
+    public async Task<IActionResult> AddQuestion([FromBody] QuestionDto questionDto)
     {
         try
         {
-            await service.AddQuestion(question);
+            await service.AddQuestion(questionDto);
             return Ok();
         }
         catch (Exception ex)
@@ -20,6 +21,7 @@ public class QuestionController(IQuestionService service):ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    
     [HttpDelete("DeleteQuestion/{questionId}")]
     public async Task<IActionResult> DeleteQuestion(uint? questionId)
     {

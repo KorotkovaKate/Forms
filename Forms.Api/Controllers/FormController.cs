@@ -1,3 +1,4 @@
+using Forms.Application.DTOs.FormDTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +9,11 @@ namespace Forms.Controllers;
 public class FormController(IFormService  formService): ControllerBase
 {
     [HttpPost("CreateForm")]
-    public async Task<IActionResult> CreateForm([FromBody] Form form)
+    public async Task<IActionResult> CreateForm([FromBody] CreateFormDto createFormDto)
     {
         try
         {
-            await formService.CreateForm(form);
+            await formService.CreateForm(createFormDto);
             return Ok();
         }
         catch (Exception ex)

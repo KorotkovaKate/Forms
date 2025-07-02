@@ -9,11 +9,11 @@ namespace Forms.Controllers;
 public class TemplateController(ITemplateService service): ControllerBase
 {
     [HttpPost("CreateTemplate")]
-    public async Task<IActionResult> CreateTemplate([FromBody] Template template)
+    public async Task<IActionResult> CreateTemplate([FromBody] CreateTemplateDto createTemplateDto)
     {
         try
         {
-            await service.CreateTemplate(template);
+            await service.CreateTemplate(createTemplateDto);
             return Ok();
         }
         catch (Exception ex)
