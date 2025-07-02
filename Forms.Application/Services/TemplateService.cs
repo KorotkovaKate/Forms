@@ -36,9 +36,11 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
         await repository.UpdateTemplate(updateTemplateDto.TemplateId.Value, template);
     }
 
-    public async Task<List<Template>> GetAllPublicTemplates()
+    public async Task<List<GetPublicTemplateDto>> GetAllPublicTemplates()
     {
-        return await repository.GetAllPublicTemplates();
+        var allPublicTemplates = await repository.GetAllTemplates();
+        if  (allPublicTemplates == null) { throw new Exception("No Public Templates found"); }
+        return TemplateMapping.GetAllPublicTemplates(allPublicTemplates);
     }
 
     public async Task<List<GetAllTemplatesForAdminDto>> GetAllTemplates()

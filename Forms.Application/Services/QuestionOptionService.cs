@@ -1,4 +1,6 @@
+using Forms.Application.DTOs.QuestionDTOs;
 using Forms.Application.Interfaces.IServices;
+using Forms.Application.Mapping;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -12,13 +14,14 @@ public class QuestionOptionService(IQuestionOptionRepository repository):IQuesti
         return await repository.GetOptionsByQuestionId(questionId.Value);
     }
 
-    public async Task AddOption(QuestionOption questionOption)
+    public async Task AddOption(AddOptionDto addOptionDto)
     {
-        if (questionOption is null) {throw new ArgumentNullException(nameof(questionOption));}
-        if (string.IsNullOrWhiteSpace(questionOption.Value))
+        if (addOptionDto is null) {throw new ArgumentNullException(nameof(addOptionDto));}
+        if (string.IsNullOrWhiteSpace(addOptionDto.Value))
         {
             throw new ArgumentException("Incorrect value");
         }
+        var questionOption = QuestionOptionMapping.AddOption(addOptionDto);
         await repository.AddOption(questionOption);
     }
 

@@ -1,4 +1,6 @@
+using Forms.Application.DTOs.AnswerDTOs;
 using Forms.Application.Interfaces.IServices;
+using Forms.Application.Mapping;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -18,9 +20,10 @@ public class AnswerService(IAnswerRepository repository): IAnswerService
         return repository.GetAnswerByQuestionId(questionId.Value);
     }
 
-    public async Task AddAnswer(Answer answer)
+    public async Task AddAnswer(AddAnswerDto addAnswerDto)
     {
-        if (answer == null) {throw new ArgumentException("Incorrect answer");}
+        if (addAnswerDto == null) {throw new ArgumentException("Incorrect answer");}
+        var answer = AnswerMapping.AddAnswer(addAnswerDto);
         await repository.AddAnswer(answer);
     }
 }
