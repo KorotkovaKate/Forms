@@ -5,7 +5,7 @@ namespace Forms.Application.DTOs.QuestionDTOs;
 
 public class QuestionDto
 {
-    public string Title { get; set; }
+    public string? Title { get; set; }
     public QuestionType Type { get; set; }
     public List<QuestionOptionDto>? Options { get; set; }
 }
