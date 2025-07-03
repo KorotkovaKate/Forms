@@ -28,7 +28,7 @@ public class TemplateMapping
             ImageUrl = createTemplateDto.ImageUrl,
             Tags = createTemplateDto.Tags,
             Status = createTemplateDto.Status,
-            TemplateCreatorId = createTemplateDto.TemplateCreatorId,
+            TemplateCreatorId = createTemplateDto.TemplateCreatorId.Value,
             Questions = createTemplateDto.Questions.Select(question => new Question
             {
                 Title = question.Title,
