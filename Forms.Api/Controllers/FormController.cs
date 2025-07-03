@@ -28,7 +28,7 @@ public class FormController(IFormService  formService): ControllerBase
         try
         {
             var form = await formService.GetFormById(formId);
-            return form != null ? Ok() : NotFound("Form not found");
+            return Ok(form);
         }
         catch (Exception ex)
         {
@@ -42,7 +42,7 @@ public class FormController(IFormService  formService): ControllerBase
         try
         {
             var forms = await formService.GetFormsByUserId(userId);
-            return Ok();
+            return Ok(forms);
         }
         catch (Exception ex)
         {
@@ -56,7 +56,7 @@ public class FormController(IFormService  formService): ControllerBase
         try
         {
             var forms = await formService.GetFormsByTemplateId(templateId);
-            return Ok();
+            return Ok(forms);
         }
         catch (Exception ex)
         {

@@ -8,26 +8,13 @@ namespace Forms.Controllers;
 [Route("Answer")]
 public class AnswerController(IAnswerService service): ControllerBase
 {
-    [HttpPost("AddAnswer")]
-    public async Task<IActionResult> AddAnswer([FromBody] AddAnswerDto addAnswerDto)
-    {
-        try
-        {
-            await service.AddAnswer(addAnswerDto);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
     [HttpGet("GetAnswersByFormId/{formId}")]
     public async Task<IActionResult> GetAnswersByFormId([FromRoute] uint? formId)
     {
         try
         {
             var answers = await service.GetAnswersByFormId(formId);
-            return Ok();
+            return Ok(answers);
         }
         catch (Exception ex)
         {
@@ -40,8 +27,8 @@ public class AnswerController(IAnswerService service): ControllerBase
     {
         try
         {
-            var answers = await service.GetAnswerByQuestionId(questionId);
-            return Ok();
+            var answers = await service.GetAnswersByQuestionId(questionId);
+            return Ok(answers);
         }
         catch (Exception ex)
         {

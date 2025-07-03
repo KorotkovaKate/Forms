@@ -40,8 +40,8 @@ public class StatisticController(IStatisticService  service): ControllerBase
     {
         try
         {
-            var stats = await service.GetStatisticsByTemplateId(templateId);
-            return Ok();
+            var statistic = await service.GetStatisticsByTemplateId(templateId);
+            return Ok(statistic);
         }
         catch (Exception ex)
         {

@@ -43,7 +43,7 @@ public class CommentController(ICommentService service):ControllerBase
         try
         {
             var comment = await service.GetCommentById(commentId);
-            return comment != null ? Ok() : NotFound("Comment not found");
+            return Ok(comment);
         }
         catch (Exception ex)
         {
@@ -71,7 +71,7 @@ public class CommentController(ICommentService service):ControllerBase
         try
         {
             var comments = await service.GetAllCommentsByTemplateId(templateId);
-            return Ok();
+            return Ok(comments);
         }
         catch (Exception ex)
         {

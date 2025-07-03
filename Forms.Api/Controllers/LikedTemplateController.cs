@@ -13,7 +13,7 @@ public class LikedTemplateController(ILikedTemplateService service):ControllerBa
         try
         {
             var templates = await service.GetLikedTemplates(userId);
-            return Ok();
+            return Ok(templates);
         }
         catch (Exception ex)
         {

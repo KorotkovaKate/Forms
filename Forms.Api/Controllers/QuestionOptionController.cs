@@ -14,7 +14,7 @@ public class QuestionOptionController(IQuestionOptionService service):Controller
         try
         {
             var options = await service.GetOptionsByQuestionId(questionId);
-            return Ok();
+            return Ok(options);
         }
         catch (Exception ex)
         {
@@ -27,7 +27,7 @@ public class QuestionOptionController(IQuestionOptionService service):Controller
         try
         {
             var option = await service.GetOptionById(optionId);
-            return option != null ? Ok() : NotFound("Option not found");
+            return Ok(option);
         }
         catch (Exception ex)
         {

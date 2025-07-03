@@ -54,7 +54,7 @@ public class UserController(IUserService  userService): ControllerBase
         try
         {
             var user = await userService.GetUserById(userId);
-            return user != null ? Ok() : NotFound("User not found");
+            return Ok(user);
         }
         catch (Exception ex)
         {

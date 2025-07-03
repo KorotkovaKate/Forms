@@ -66,7 +66,7 @@ public class TemplateController(ITemplateService service): ControllerBase
         try
         {
             var publicTemplates = await service.GetAllPublicTemplates();
-            return Ok();
+            return Ok(publicTemplates);
         }
         catch (Exception ex)
         {
@@ -79,7 +79,7 @@ public class TemplateController(ITemplateService service): ControllerBase
         try
         {
             var template = await service.GetTemplateById(templateId);
-            return template != null ? Ok() : NotFound("Template not found");
+            return Ok(template);
         }
         catch (Exception ex)
         {

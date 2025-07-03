@@ -41,7 +41,7 @@ public class QuestionController(IQuestionService service):ControllerBase
         try
         {
             var question = await service.GetById(questionId);
-            return question != null ? Ok() : NotFound("Question not found");
+            return Ok(question);
         }
         catch (Exception ex)
         {
@@ -54,7 +54,7 @@ public class QuestionController(IQuestionService service):ControllerBase
         try
         {
             var questions = await service.GetQuestionsByTemplateId(templateId);
-            return Ok();
+            return Ok(questions);
         }
         catch (Exception ex)
         {
