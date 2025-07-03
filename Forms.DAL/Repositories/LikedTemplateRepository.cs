@@ -6,7 +6,7 @@ namespace Forms.DAL.Repositories;
 
 public class LikedTemplateRepository(FormDbContext context): ILikedTemplateRepository
 {
-    public async Task<List<Template>> GetLikedTemplatesByUserId(uint userId)
+    public async Task<List<Template>?> GetLikedTemplatesByUserId(uint userId)
     {
         return await context.LikedTemplates
             .Where(likedTemplates => likedTemplates.UserId == userId)
@@ -15,7 +15,7 @@ public class LikedTemplateRepository(FormDbContext context): ILikedTemplateRepos
             .ToListAsync();
     }
     
-    public async Task<Template> GetLikedTemplate(uint userId, uint templateId)
+    public async Task<Template?> GetLikedTemplate(uint userId, uint templateId)
     {
         var likedTemplate = await context.LikedTemplates
             .Include(likedTemplates => likedTemplates.Template)

@@ -6,7 +6,7 @@ namespace Forms.DAL.Repositories;
 
 public class AnswerRepository(FormDbContext context): IAnswerRepository
 {
-    public async Task<List<Answer>> GetAnswersByFormId(uint formId)
+    public async Task<List<Answer>?> GetAnswersByFormId(uint formId)
     {
         return await context.Answers
             .AsNoTracking()
@@ -15,7 +15,7 @@ public class AnswerRepository(FormDbContext context): IAnswerRepository
             .ToListAsync();
     }
 
-    public async Task<List<Answer>> GetAnswerByQuestionId(uint questionId)
+    public async Task<List<Answer>?> GetAnswersByQuestionId(uint questionId)
     {
         return await context.Answers
             .AsNoTracking()

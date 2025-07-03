@@ -12,9 +12,9 @@ public class StatisticRepository(FormDbContext context): IStatisticRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task UpdateStatistic(uint statisticId, Statistic updatedStatistic)
+    public async Task UpdateStatistic(Statistic updatedStatistic)
     {
-        var statistic = await context.Statistics.FindAsync(statisticId);
+        var statistic = await context.Statistics.FindAsync(updatedStatistic.Id);
         if (statistic is not null)
         {
             statistic.AnswerFrequencyInPercent = updatedStatistic.AnswerFrequencyInPercent;

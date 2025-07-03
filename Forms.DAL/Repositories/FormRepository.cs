@@ -23,7 +23,7 @@ public class FormRepository(FormDbContext context): IFormRepository
             .FirstOrDefaultAsync(form => form.Id == formId);
     }
 
-    public async Task<List<Form>> GetFormsByUserId(uint userId)
+    public async Task<List<Form>?> GetFormsByUserId(uint userId)
     {
         return await context.Forms
             .AsNoTracking()
@@ -34,7 +34,7 @@ public class FormRepository(FormDbContext context): IFormRepository
             .ToListAsync();
     }
 
-    public async Task<List<Form>> GetFormsByTemplateId(uint templateId)
+    public async Task<List<Form>?> GetFormsByTemplateId(uint templateId)
     {
         return await context.Forms
             .AsNoTracking()

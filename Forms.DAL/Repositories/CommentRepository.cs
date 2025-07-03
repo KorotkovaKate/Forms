@@ -44,7 +44,7 @@ public class CommentRepository(FormDbContext context): ICommentRepository
         }
     }
 
-    public async Task<List<Comment>> GetAllCommentsByTemplateId(uint templateId)
+    public async Task<List<Comment>?> GetAllCommentsByTemplateId(uint templateId)
     {
         return await context.Comments
             .AsNoTracking()

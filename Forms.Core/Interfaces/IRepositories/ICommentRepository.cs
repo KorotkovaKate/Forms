@@ -8,5 +8,5 @@ public interface ICommentRepository
     public Task DeleteComment(Comment comment);
     public Task<Comment?> GetCommentById(uint commentId);
     public Task UpdateComment(uint commentId, string textToEdit);
-    public Task<List<Comment>> GetAllCommentsByTemplateId(uint templateId);
+    public Task<List<Comment>?> GetAllCommentsByTemplateId(uint templateId);
 }
