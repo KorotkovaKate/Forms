@@ -10,29 +10,34 @@ public class FormService(IFormRepository repository): IFormService
 {
     public async Task CreateForm(CreateFormDto createFormDto)
     {
-        if (createFormDto == null || createFormDto.SubmitterId == null || createFormDto.TemplateId == null)
-        {
-            throw new ArgumentException("Invalid form");
-        }
+        if (createFormDto == null || createFormDto.SubmitterId == null || createFormDto.TemplateId == null
+            || createFormDto.Answers == null) throw new ArgumentException("Invalid form");
+        //прописать проверку answerов, чтобы какой-то можеьт быть нал
         var form = FormMapping.CreateForm(createFormDto);
         await repository.CreateForm(form);
     }
 
-    public async Task<Form?> GetFormById(uint? formId)
+    public async Task<Form> GetFormById(uint? formId)
     {
         if (formId == null) {throw new ArgumentException("Incorrect form id");}
-        return await repository.GetFormById(formId.Value);
+        var form = await repository.GetFormById(formId.Value);
+        if (form == null) throw new ArgumentException("Form not found");
+        return form;
     }
 
     public async Task<List<Form>> GetFormsByUserId(uint? userId)
     {
         if (userId == null) {throw new ArgumentException("Incorrect user id");}
-        return await repository.GetFormsByUserId(userId.Value);
+        var forms = await repository.GetFormsByUserId(userId.Value);
+        if (forms == null) throw new ArgumentException("Forms not found");
+        return forms;
     }
 
     public async Task<List<Form>> GetFormsByTemplateId(uint? templateId)
     {
         if (templateId == null) {throw new ArgumentException("Incorrect template id");}
-        return await repository.GetFormsByUserId(templateId.Value);
+        var  forms = await repository.GetFormsByTemplateId(templateId.Value);
+        if (forms == null) throw new ArgumentException("Forms not found");
+        return forms;
     }
 }

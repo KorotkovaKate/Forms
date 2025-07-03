@@ -10,20 +10,17 @@ public class AnswerService(IAnswerRepository repository): IAnswerService
 {
     public async Task<List<Answer>> GetAnswersByFormId(uint? formId)
     {
-        if (formId == null) {throw new ArgumentException("Incorrect form id");}
-        return await repository.GetAnswersByFormId(formId.Value);
+        if (formId == null) {throw new ArgumentException("Incorrect form id");} 
+        var answers = await repository.GetAnswersByFormId(formId.Value);
+        if(answers == null) throw new ArgumentException("No answers found");
+        return answers;
     }
 
-    public Task<List<Answer>> GetAnswerByQuestionId(uint? questionId)
+    public async Task<List<Answer>> GetAnswersByQuestionId(uint? questionId)
     {
         if  (questionId == null) {throw new ArgumentException("Incorrect questionId");}
-        return repository.GetAnswerByQuestionId(questionId.Value);
-    }
-
-    public async Task AddAnswer(AddAnswerDto addAnswerDto)
-    {
-        if (addAnswerDto == null) {throw new ArgumentException("Incorrect answer");}
-        var answer = AnswerMapping.AddAnswer(addAnswerDto);
-        await repository.AddAnswer(answer);
+        var answers = await repository.GetAnswersByQuestionId(questionId.Value);
+        if(answers == null) throw new ArgumentException("No answers found");
+        return answers;
     }
 }

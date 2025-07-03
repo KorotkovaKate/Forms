@@ -11,34 +11,44 @@ public class CommentService(ICommentRepository repository): ICommentService
 {
     public async Task AddComment(AddCommentDto addCommentDto)
     {
-        if (addCommentDto == null) {throw new ArgumentException("Incorrect comment");}
+        if (addCommentDto == null || addCommentDto.UserId == null
+                                  || addCommentDto.TemplateId == null
+                                  || string.IsNullOrWhiteSpace(addCommentDto.Text))
+        {
+            throw new ArgumentException("Incorrect comment");
+        }
         var comment = CommentMapping.AddComment(addCommentDto);
         await repository.AddComment(comment);
     }
 
     public async Task DeleteComment(uint? commentId)
     {
+        if (commentId == null) throw new ArgumentException("Id can't be null");
         var comment = await GetCommentById(commentId);
-        if (comment == null) {throw new ArgumentException("Incorrect comment");}
+        if (comment == null) {throw new ArgumentException("Comment not found");}
         await repository.DeleteComment(comment);
     }
 
-    public Task<Comment?> GetCommentById(uint? commentId)
+    public async Task<Comment> GetCommentById(uint? commentId)
     {
         if  (commentId == null) {throw new ArgumentException("Incorrect commentId");}
-        return repository.GetCommentById(commentId.Value);
+        var comment = await repository.GetCommentById(commentId.Value);
+        if(comment == null) {throw new ArgumentException("Comment not found");}
+        return comment;
     }
 
     public async Task UpdateComment(UpdateCommentDto updateCommentDto)
     {
-        if(updateCommentDto.Id == null) throw new Exception("Message cant be found");
+        if(updateCommentDto == null || updateCommentDto.Id == null) throw new Exception("Message cant be found");
         if(string.IsNullOrWhiteSpace(updateCommentDto.Text)) throw new Exception("Text to edit cant be empty");
         await repository.UpdateComment(updateCommentDto.Id.Value, updateCommentDto.Text);
     }
 
-    public Task<List<Comment>> GetAllCommentsByTemplateId(uint? templateId)
+    public async Task<List<Comment>> GetAllCommentsByTemplateId(uint? templateId)
     {
         if  (templateId == null) {throw new ArgumentException("Incorrect templateId");}
-        return repository.GetAllCommentsByTemplateId(templateId.Value);
+        var comments = await repository.GetAllCommentsByTemplateId(templateId.Value);
+        if(comments == null) throw new ArgumentException("Comments not found");
+        return comments;
     }
 }

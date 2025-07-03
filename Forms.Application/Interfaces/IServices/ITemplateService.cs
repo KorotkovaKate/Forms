@@ -10,7 +10,7 @@ public interface ITemplateService
     public Task UpdateTemplate(UpdateTemplateDto  updateTemplateDto);
     public Task<List<GetPublicTemplateDto>> GetAllPublicTemplates();
     public Task<List<GetAllTemplatesForAdminDto>> GetAllTemplates();
-    public Task<Template?> GetTemplateById(uint? templateId);
+    public Task<Template> GetTemplateById(uint? templateId);
     public Task IncreaseLikeNumber(uint? templateId);
     public Task DecreaseLikeNumber(uint? templateId);
 }

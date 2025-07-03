@@ -10,7 +10,7 @@ public class QuestionService(IQuestionRepository repository): IQuestionService
 {
     public async Task AddQuestion(QuestionDto questionDto)
     {
-        if (questionDto is null) {throw new ArgumentNullException(nameof(questionDto));}
+        ArgumentNullException.ThrowIfNull(questionDto);
         if (string.IsNullOrWhiteSpace(questionDto.Title))
         {
             throw new ArgumentException("Incorrect question title or template id");
@@ -21,20 +21,24 @@ public class QuestionService(IQuestionRepository repository): IQuestionService
 
     public async Task DeleteQuestion(uint? questionId)
     {
+        ArgumentNullException.ThrowIfNull(questionId, "Question id can't be null");
         var question = await GetById(questionId);
-        if (question is null) {throw new ArgumentNullException(nameof(question));}
         await repository.DeleteQuestion(question);
     }
 
-    public async Task<Question?> GetById(uint? questionId)
+    public async Task<Question> GetById(uint? questionId)
     {
-        if (questionId == null) {throw new ArgumentException("Incorrect question id");}
-        return await repository.GetById(questionId.Value);
+        ArgumentNullException.ThrowIfNull(questionId, "Question id is null");
+        var question = await repository.GetById(questionId.Value);
+        ArgumentNullException.ThrowIfNull(question, "question not found");
+        return question;
     }
 
     public async Task<List<Question>> GetQuestionsByTemplateId(uint? templateId)
     {
-        if  (templateId == null) {throw new ArgumentException("Incorrect template id");}
-        return await repository.GetQuestionsByTemplateId(templateId.Value);
+        ArgumentNullException.ThrowIfNull(templateId, "Template id can't be null");
+        var questions = await repository.GetQuestionsByTemplateId(templateId.Value);
+        if(!questions.Any()) throw new ArgumentException("No questions found");
+        return questions;
     }
 }

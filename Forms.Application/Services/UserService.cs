@@ -12,13 +12,13 @@ namespace Forms.Application.Services;
 
 public class UserService(IUserRepository repository, IPasswordHasher hasher): IUserService
 {
-    public async Task<User?> Authorize(AuthorizationDto authorizationDto)
+    public async Task<User> Authorize(AuthorizationDto authorizationDto)
     {
-        var passwordHash = hasher.CalculateHash(authorizationDto.Password);
-        if (authorizationDto.Email == null || authorizationDto.Password == null)
+        if (string.IsNullOrWhiteSpace(authorizationDto.Email) || string.IsNullOrWhiteSpace(authorizationDto.Password))
         {
-            throw new ArgumentNullException("Еmail or password are empty");
+            throw new ArgumentException("Email or password are empty");
         }
+        var passwordHash = hasher.CalculateHash(authorizationDto.Password);
         var user = await repository.Authorize(authorizationDto.Email, passwordHash);
         if (user == null) { throw new Exception("Not found user"); }
         if (user.Status == UserStatus.Blocked) {throw new Exception("User is blocked"); }
@@ -27,22 +27,29 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher): IU
 
     public async Task Registrate(RegistrationDto registrationDto)
     {
+        if (string.IsNullOrWhiteSpace(registrationDto.Email) || string.IsNullOrWhiteSpace(registrationDto.Password)
+                                                             || string.IsNullOrWhiteSpace(registrationDto.Username))
+        {
+            throw new  ArgumentException("Email, password or username are empty");
+        }
         var passwordHash = hasher.CalculateHash(registrationDto.Password);
         var user = UserMapping.MapRegistrationDtoToUser(registrationDto,  passwordHash);
         if (user == null) { throw new Exception("Empty user"); }
         await repository.Registrate(user);
     }
 
-    public async Task<User?> GetUserById(uint? userId)
+    public async Task<User> GetUserById(uint? userId)
     {
-        if (userId == null) { throw new ArgumentException("Inccorect id"); }
+        if (userId == null) { throw new ArgumentException("Incorrect id"); }
         var user = await repository.GetUserById(userId.Value);
+        if (user == null) { throw new ArgumentException("Not found user"); }
         return user;
     }
 
     public async Task<List<User>> GetAllUsers()
     {
         var users = await repository.GetAllUsers();
+        if(!users.Any()) { throw new Exception("No users"); }
         return users;
     }
 }

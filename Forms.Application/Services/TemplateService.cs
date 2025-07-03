@@ -23,7 +23,7 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
 
     public async Task DeleteTemplate(uint? templateId)
     {
-        if (templateId == null) {throw new ArgumentException("Inccorect id");}
+        if (templateId == null) {throw new ArgumentException("Incorrect id");}
         Template? template = await GetTemplateById(templateId);
         if (template == null) { throw new ArgumentException("Template not found"); }
         await repository.DeleteTemplate(template);
@@ -31,7 +31,9 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
 
     public async Task UpdateTemplate(UpdateTemplateDto  updateTemplateDto)
     {
-        if (updateTemplateDto.TemplateId == null) {throw new ArgumentException("Invalid input data");}
+        if (updateTemplateDto.TemplateId == null
+            || string.IsNullOrWhiteSpace(updateTemplateDto.Title)
+            || string.IsNullOrWhiteSpace(updateTemplateDto.Description)) {throw new ArgumentException("Invalid input data");}
         var template = TemplateMapping.UpdateTemplate(updateTemplateDto);
         await repository.UpdateTemplate(updateTemplateDto.TemplateId.Value, template);
     }
@@ -39,21 +41,25 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
     public async Task<List<GetPublicTemplateDto>> GetAllPublicTemplates()
     {
         var allPublicTemplates = await repository.GetAllTemplates();
-        if  (allPublicTemplates == null) { throw new Exception("No Public Templates found"); }
+        ArgumentNullException.ThrowIfNull(allPublicTemplates, "Template list is null");
+        if (!allPublicTemplates.Any()) throw new ArgumentException("Template not found");
         return TemplateMapping.GetAllPublicTemplates(allPublicTemplates);
     }
 
     public async Task<List<GetAllTemplatesForAdminDto>> GetAllTemplates()
     {
         var templates = await repository.GetAllTemplates();
-        if(templates == null) throw new Exception("Templates not found");
+        if(templates == null) throw new Exception("Template list cannot be null");
+        if (!templates.Any()) throw new Exception("Template not found");
         return TemplateMapping.GetAllTemplatesForAdmin(templates);
     }
 
-    public async Task<Template?> GetTemplateById(uint? templateId)
+    public async Task<Template> GetTemplateById(uint? templateId)
     {
-        if (templateId == null) {throw new ArgumentException("Incorrect id");}
-        return await repository.GetTemplateById(templateId.Value);
+        if (templateId == null) {throw new ArgumentNullException("Incorrect id");}
+        var template = await repository.GetTemplateById(templateId.Value);
+        ArgumentNullException.ThrowIfNull(template, "Template not found");
+        return template;
     }
 
     public async Task IncreaseLikeNumber(uint? templateId)
@@ -67,8 +73,7 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
     public async Task DecreaseLikeNumber(uint? templateId)
     {
         if (templateId == null) {throw new ArgumentException("Incorrect id");}
-        Template? template = await GetTemplateById(templateId);
-        if (template == null) { throw new ArgumentException("Template not found");}
+        Template template = await GetTemplateById(templateId);
         await repository.DecreaseLikeNumber(template);
     }
 }
