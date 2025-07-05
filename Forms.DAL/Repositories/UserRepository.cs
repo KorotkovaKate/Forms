@@ -1,3 +1,4 @@
+using Forms.Core.Enums;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -32,5 +33,17 @@ public class UserRepository(FormDbContext context): IUserRepository
     {
         return await context.Users
             .FindAsync(userId);
+    }
+
+    public async Task BlockUser(User user)
+    {
+        user.Status = UserStatus.Blocked;
+        await context.SaveChangesAsync();
+    }
+
+    public async Task ActivateUser(User user)
+    {
+        user.Status = UserStatus.Active;
+        await context.SaveChangesAsync();
     }
 }

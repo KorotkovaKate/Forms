@@ -39,6 +39,7 @@ public class FormRepository(FormDbContext context): IFormRepository
         return await context.Forms
             .AsNoTracking()
             .Include(form => form.Submitter)
+            .Include(form => form.Template)
             .Include(form => form.Answers)
             .ThenInclude(answer => answer.Question)
             .Where(form => form.TemplateId == templateId)
