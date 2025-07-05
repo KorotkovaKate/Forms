@@ -46,7 +46,7 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
         return TemplateMapping.GetAllPublicTemplates(allPublicTemplates);
     }
 
-    public async Task<List<GetAllTemplatesForAdminDto>> GetAllTemplates()
+    public async Task<List<GetAllTemplatesDto>> GetAllTemplates()
     {
         var templates = await repository.GetAllTemplates();
         if(templates == null) throw new Exception("Template list cannot be null");

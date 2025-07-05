@@ -47,11 +47,12 @@ public  class StatisticService(IStatisticRepository statisticRepository, IAnswer
         await statisticRepository.UpdateStatistic(statistic);
     }
 
-    public async Task<List<Statistic>> GetStatisticsByTemplateId(uint? templateId)
+    public async Task<List<GetStatisticDto>> GetStatisticsByTemplateId(uint? templateId)
     {
         ArgumentNullException.ThrowIfNull(templateId, "Template id can't be null");
         var statisctic = await statisticRepository.GetStatisticsByTemplateId(templateId.Value);
         if(!statisctic.Any()) throw new ArgumentException("No statistics found");
-        return statisctic;
+        var allStatistic = StatisticMapping.GetStatistic(statisctic);
+        return allStatistic;
     }
 }

@@ -11,8 +11,7 @@ public class FormService(IFormRepository repository): IFormService
     public async Task CreateForm(CreateFormDto createFormDto)
     {
         if (createFormDto == null || createFormDto.SubmitterId == null || createFormDto.TemplateId == null
-            || createFormDto.Answers == null) throw new ArgumentException("Invalid form");
-        //прописать проверку answerов, чтобы какой-то можеьт быть нал
+            || createFormDto.Answers == null) {throw new ArgumentException("Invalid form");}
         var form = FormMapping.CreateForm(createFormDto);
         await repository.CreateForm(form);
     }
@@ -33,11 +32,12 @@ public class FormService(IFormRepository repository): IFormService
         return forms;
     }
 
-    public async Task<List<Form>> GetFormsByTemplateId(uint? templateId)
+    public async Task<List<GetFormByTemplateIdDto>> GetFormsByTemplateId(uint? templateId)
     {
         if (templateId == null) {throw new ArgumentException("Incorrect template id");}
         var  forms = await repository.GetFormsByTemplateId(templateId.Value);
         if (forms == null) throw new ArgumentException("Forms not found");
-        return forms;
+        var  allForms = FormMapping.GetFormByTemplateId(forms);
+        return allForms;
     }
 }

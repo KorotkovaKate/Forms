@@ -44,11 +44,12 @@ public class CommentService(ICommentRepository repository): ICommentService
         await repository.UpdateComment(updateCommentDto.Id.Value, updateCommentDto.Text);
     }
 
-    public async Task<List<Comment>> GetAllCommentsByTemplateId(uint? templateId)
+    public async Task<List<GetAllCommentsByTemplateIdDto>> GetAllCommentsByTemplateId(uint? templateId)
     {
         if  (templateId == null) {throw new ArgumentException("Incorrect templateId");}
         var comments = await repository.GetAllCommentsByTemplateId(templateId.Value);
-        if(comments == null) throw new ArgumentException("Comments not found");
-        return comments;
+        if(comments == null || !comments.Any()) throw new ArgumentException("Comments not found");
+        var allComments = CommentMapping.GetAllComments(comments);
+        return allComments;
     }
 }

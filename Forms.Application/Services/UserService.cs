@@ -2,6 +2,7 @@ using System.Text;
 using Forms.Application.DTOs;
 using Forms.Application.Interfaces.ISecurity;
 using Forms.Application.Interfaces.IServices;
+using Forms.Application.JwtTokens;
 using Forms.Application.Mapping;
 using Forms.Core.Enums;
 using Forms.Core.Interfaces.IRepositories;
@@ -10,9 +11,9 @@ using SHA3.Net;
 
 namespace Forms.Application.Services;
 
-public class UserService(IUserRepository repository, IPasswordHasher hasher): IUserService
+public class UserService(IUserRepository repository, IPasswordHasher hasher, JwtService jwtService): IUserService
 {
-    public async Task<User> Authorize(AuthorizationDto authorizationDto)
+    public async Task<string> Authorize(AuthorizationDto authorizationDto)
     {
         if (string.IsNullOrWhiteSpace(authorizationDto.Email) || string.IsNullOrWhiteSpace(authorizationDto.Password))
         {
@@ -21,8 +22,11 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher): IU
         var passwordHash = hasher.CalculateHash(authorizationDto.Password);
         var user = await repository.Authorize(authorizationDto.Email, passwordHash);
         if (user == null) { throw new Exception("Not found user"); }
-        if (user.Status == UserStatus.Blocked) {throw new Exception("User is blocked"); }
-        return user;
+        else
+        {
+            if (user.Status == UserStatus.Blocked) {throw new Exception("User is blocked"); }
+            return jwtService.CreateToken(user);
+        }
     }
 
     public async Task Registrate(RegistrationDto registrationDto)
@@ -51,5 +55,21 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher): IU
         var users = await repository.GetAllUsers();
         if(!users.Any()) { throw new Exception("No users"); }
         return users;
+    }
+
+    public async Task BlockUser(uint? userId)
+    {
+        if  (userId == null) { throw new ArgumentException("Incorrect id"); }
+        var user = await GetUserById(userId);
+        ArgumentNullException.ThrowIfNull(user, "Not found user");
+        await repository.BlockUser(user); 
+    }
+
+    public async Task ActivateUser(uint? userId)
+    {
+        if  (userId == null) { throw new ArgumentException("Incorrect id"); }
+        var user = await GetUserById(userId);
+        ArgumentNullException.ThrowIfNull(user, "Not found user");
+        await repository.ActivateUser(user);
     }
 }
