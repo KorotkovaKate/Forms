@@ -2,7 +2,7 @@ using Forms.Core.Enums;
 
 namespace Forms.Application.DTOs;
 
-public class GetAllTemplatesForAdminDto
+public class GetAllTemplatesDto
 {
     public uint Id { get; set; }
     public string Title { get; set; }
