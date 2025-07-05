@@ -41,13 +41,13 @@ public class TemplateMapping
         };
     }
 
-    public static List<GetAllTemplatesForAdminDto> GetAllTemplatesForAdmin(List<Template> templates)
+    public static List<GetAllTemplatesDto> GetAllTemplatesForAdmin(List<Template> templates)
     {
-        List<GetAllTemplatesForAdminDto> allTemplatesForAdmin = [];
+        List<GetAllTemplatesDto> allTemplatesForAdmin = [];
         
         foreach (var template in templates)
         {
-            var templateDto = new GetAllTemplatesForAdminDto
+            var templateDto = new GetAllTemplatesDto
             {
                 Id = template.Id,
                 Title = template.Title,
