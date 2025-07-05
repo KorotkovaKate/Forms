@@ -7,5 +7,5 @@ public interface IStatisticService
 {
     public Task AddStatistic(uint? questionId);
     public Task UpdateStatistic(UpdateStatisticDto updateStatisticDto);
-    public Task<List<Statistic>> GetStatisticsByTemplateId(uint? templateId);
+    public Task<List<GetStatisticDto>> GetStatisticsByTemplateId(uint? templateId);
 }

@@ -8,5 +8,5 @@ public interface IFormService
     public Task CreateForm(CreateFormDto createFormDto);
     public Task<Form> GetFormById(uint? formId);
     public Task<List<Form>> GetFormsByUserId(uint? userId);
-    public Task<List<Form>> GetFormsByTemplateId(uint? templateId);
+    public Task<List<GetFormByTemplateIdDto>> GetFormsByTemplateId(uint? templateId);
 }
