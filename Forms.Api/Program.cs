@@ -1,5 +1,6 @@
 using Forms.Application.Interfaces.ISecurity;
 using Forms.Application.Interfaces.IServices;
+using Forms.Application.JwtTokens;
 using Forms.Application.Services;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.DAL;
@@ -37,6 +38,10 @@ builder.Services.AddScoped<IStatisticService, StatisticService>();
 
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+builder.Services.AddScoped<JwtService>();
+builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("AuthSettings"));
+builder.Services.AddJwtTokens(builder.Configuration);
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -48,9 +53,18 @@ builder.Services.AddControllers()
 
 var app = builder.Build();
 
+app.UseCors(policyBuilder => policyBuilder
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowAnyOrigin());
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();
 

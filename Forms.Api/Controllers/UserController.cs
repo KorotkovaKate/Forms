@@ -1,5 +1,6 @@
 using Forms.Application.DTOs;
 using Forms.Application.Interfaces.IServices;
+using Forms.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Forms.Controllers;
@@ -26,8 +27,8 @@ public class UserController(IUserService  userService): ControllerBase
     {
         try
         {
-            var user = await userService.Authorize(authorizationDto);
-            return Ok(user);
+            var token = await userService.Authorize(authorizationDto);
+            return Ok(token);
         }
         catch (Exception ex)
         {
@@ -55,6 +56,32 @@ public class UserController(IUserService  userService): ControllerBase
         {
             var user = await userService.GetUserById(userId);
             return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    [HttpPost("BlockUser")]
+    public async Task<IActionResult> BlockUser([FromBody] uint? userId)
+    {
+        try
+        {
+            await userService.BlockUser(userId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    [HttpPost("ActivateUser")]
+    public async Task<IActionResult> ActivateUser([FromBody] uint? userId)
+    {
+        try
+        {
+            await userService.ActivateUser(userId);
+            return Ok();
         }
         catch (Exception ex)
         {
