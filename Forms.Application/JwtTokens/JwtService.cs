@@ -15,8 +15,8 @@ public class JwtService(IOptions<AuthSettings> options)
         var claims = new List<Claim>
         {
             new Claim("Id", user.Id.ToString()),
-            new Claim("UserName", user.UserName),
             new Claim("Email", user.Email),
+            new Claim("Role", user.Role.ToString()),
         };
         var jwtToken = new JwtSecurityToken(
             expires: DateTime.UtcNow.Add(options.Value.TokenLifetime),
