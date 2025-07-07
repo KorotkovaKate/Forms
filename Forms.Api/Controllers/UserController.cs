@@ -27,14 +27,16 @@ public class UserController(IUserService  userService): ControllerBase
     {
         try
         {
-            var token = await userService.Authorize(authorizationDto);
-            return Ok(token);
+            var response = await userService.Authorize(authorizationDto);
+            
+            return Ok(response);
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
     }
+    
     [HttpPost("Registrate")]
     public async Task<IActionResult> Registrate([FromBody] RegistrationDto registrationDto)
     {
@@ -62,6 +64,7 @@ public class UserController(IUserService  userService): ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    
     [HttpPost("BlockUser")]
     public async Task<IActionResult> BlockUser([FromBody] uint? userId)
     {
@@ -75,6 +78,7 @@ public class UserController(IUserService  userService): ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    
     [HttpPost("ActivateUser")]
     public async Task<IActionResult> ActivateUser([FromBody] uint? userId)
     {

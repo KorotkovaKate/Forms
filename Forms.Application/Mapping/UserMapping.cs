@@ -15,4 +15,29 @@ public static class UserMapping
             Role = registrationDto.Role
         };
     }
+
+    public static List<GetAllUsersDto> GetAllUsers(List<User> users)
+    {
+        List<GetAllUsersDto> usersDto = new List<GetAllUsersDto>();
+        
+        foreach(var user in users) usersDto.Add(new GetAllUsersDto
+        {
+            UserId = user.Id,
+            UserName = user.UserName,
+            Email = user.Email,
+            Role = user.Role,
+            Status = user.Status
+        });
+        
+        return usersDto;
+    }
+
+    public static AuthorizationResponseDto AuthorizationResponse(uint userId, string? token)
+    {
+        return new AuthorizationResponseDto
+        {
+            UserId = userId,
+            Token = token
+        };
+    }
 }

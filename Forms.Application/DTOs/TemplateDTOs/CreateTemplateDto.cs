@@ -12,5 +12,5 @@ public class CreateTemplateDto
     public List<string> Tags { get; set; } = [];
     public TemplateStatus Status { get; set; }
     public uint? TemplateCreatorId { get; set; }
-    public List<QuestionDto> Questions { get; set; } //тут подумать
+    public List<QuestionDto> Questions { get; set; }
 }

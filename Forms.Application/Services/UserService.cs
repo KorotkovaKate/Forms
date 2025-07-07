@@ -13,7 +13,7 @@ namespace Forms.Application.Services;
 
 public class UserService(IUserRepository repository, IPasswordHasher hasher, JwtService jwtService): IUserService
 {
-    public async Task<string> Authorize(AuthorizationDto authorizationDto)
+    public async Task<AuthorizationResponseDto> Authorize(AuthorizationDto authorizationDto)
     {
         if (string.IsNullOrWhiteSpace(authorizationDto.Email) || string.IsNullOrWhiteSpace(authorizationDto.Password))
         {
@@ -25,7 +25,11 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, Jwt
         else
         {
             if (user.Status == UserStatus.Blocked) {throw new Exception("User is blocked"); }
-            return jwtService.CreateToken(user);
+
+            string? token = jwtService.CreateToken(user);
+            
+            var response = UserMapping.AuthorizationResponse(user.Id, token);
+            return response;
         }
     }
 
@@ -50,11 +54,13 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, Jwt
         return user;
     }
 
-    public async Task<List<User>> GetAllUsers()
+    public async Task<List<GetAllUsersDto>> GetAllUsers()
     {
         var users = await repository.GetAllUsers();
         if(!users.Any()) { throw new Exception("No users"); }
-        return users;
+
+        var usersDto = UserMapping.GetAllUsers(users);
+        return usersDto;
     }
 
     public async Task BlockUser(uint? userId)
