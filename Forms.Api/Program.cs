@@ -55,10 +55,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://front-forms-zeta.vercel.app","http://localhost:5173/")
+        policy.WithOrigins("http://localhost:5173/")
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowAnyMethod();
     });
 });
 
@@ -67,9 +66,6 @@ var app = builder.Build();
 app.UseRouting();
 
 app.UseCors("AllowFrontend");
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.UseSwagger();
 app.UseSwaggerUI();
