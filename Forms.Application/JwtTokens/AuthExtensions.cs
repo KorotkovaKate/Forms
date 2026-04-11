@@ -11,6 +11,8 @@ public static class AuthExtensions
     public static IServiceCollection AddJwtTokens(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         var authSettings = configuration.GetSection(nameof(AuthSettings)).Get<AuthSettings>();
+        if(authSettings == null) throw new Exception("Auth settings not found");
+        
         serviceCollection.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters()
