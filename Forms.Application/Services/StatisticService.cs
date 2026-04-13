@@ -1,6 +1,8 @@
+using System.Net;
 using Forms.Application.DTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Application.Mapping;
+using Forms.Core.Common;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -8,11 +10,17 @@ namespace Forms.Application.Services;
 
 public  class StatisticService(IStatisticRepository statisticRepository, IAnswerService answerService, IQuestionService questionService):IStatisticService
 {
-    public async Task AddStatistic(uint? questionId)
+    public async Task<Result<bool>> AddStatistic(uint? questionId)
     {
-        ArgumentNullException.ThrowIfNull(questionId, "Question id can't be null");
-        var answers = await answerService.GetAnswersByQuestionId(questionId.Value);
-        if (!answers.Any()) {throw new InvalidOperationException("No answers found");}
+        if(questionId == null) Result<bool>.Failure("Incorrect question ID", HttpStatusCode.BadRequest);
+        var answersInResult = await answerService.GetAnswersByQuestionId(questionId.Value);
+        if (!answersInResult.IsSuccess)
+            return Result<bool>.Failure(answersInResult.ErrorMessage, HttpStatusCode.InternalServerError); //can use my exception
+        
+        if (answersInResult.Data.Count == 0) 
+            return Result<bool>.Failure("Statistics can't be formed, because no answers", HttpStatusCode.BadRequest);
+
+        var answers = answersInResult.Data;
         var grouped = answers
             .GroupBy(answer => answer.Value)
             .Select(group => new { Answer = group.Key, Count = group.Count() })
@@ -35,6 +43,7 @@ public  class StatisticService(IStatisticRepository statisticRepository, IAnswer
         };
 
         await statisticRepository.AddStatistic(statistic);
+        return Result<bool>.Success(true);
     }
 
     public async Task UpdateStatistic(UpdateStatisticDto updateStatisticDto)
