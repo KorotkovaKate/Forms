@@ -1,12 +1,13 @@
 using Forms.Application.DTOs.FormDTOs;
+using Forms.Core.Common;
 using Forms.Core.Models;
 
 namespace Forms.Application.Interfaces.IServices;
 
 public interface IFormService
 {
-    public Task CreateForm(CreateFormDto createFormDto);
-    public Task<Form> GetFormById(uint? formId);
-    public Task<List<Form>> GetFormsByUserId(uint? userId);
-    public Task<List<GetFormByTemplateIdDto>> GetFormsByTemplateId(uint? templateId);
+    public Task<Result<bool>> CreateForm(CreateFormDto? createFormDto);
+    public Task<Result<Form>> GetFormById(uint? formId);
+    public Task<Result<List<Form>>> GetFormsByUserId(uint? userId);
+    public Task<Result<List<GetFormByTemplateIdDto>>> GetFormsByTemplateId(uint? templateId);
 }
