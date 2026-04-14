@@ -35,8 +35,10 @@ public  class StatisticService(IStatisticRepository statisticRepository, IAnswer
 
         int percent = (int)Math.Round((double)(grouped.Count * 100) / answers.Count);
 
-        var question = await questionService.GetById(questionId.Value);
-        if (question == null) {throw new InvalidOperationException("No question found");}
+        var questionResult = await questionService.GetById(questionId.Value);
+        if (!questionResult.IsSuccess) return Result<bool>.Failure(questionResult.ErrorMessage, HttpStatusCode.NotFound);
+        
+        var question = questionResult.Data;
         
         var statistic = new Statistic
         {
