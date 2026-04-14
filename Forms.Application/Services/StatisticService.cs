@@ -12,13 +12,17 @@ public  class StatisticService(IStatisticRepository statisticRepository, IAnswer
 {
     public async Task<Result<bool>> AddStatistic(uint? questionId)
     {
-        if(questionId == null) Result<bool>.Failure("Incorrect question ID", HttpStatusCode.BadRequest);
+        if(questionId == null) Result<bool>
+            .Failure("Incorrect question ID", HttpStatusCode.BadRequest);
+        
         var answersInResult = await answerService.GetAnswersByQuestionId(questionId.Value);
         if (!answersInResult.IsSuccess)
-            return Result<bool>.Failure(answersInResult.ErrorMessage, HttpStatusCode.InternalServerError); //can use my exception
+            return Result<bool>
+                .Failure(answersInResult.ErrorMessage, HttpStatusCode.InternalServerError); //can use my exception
         
         if (answersInResult.Data.Count == 0) 
-            return Result<bool>.Failure("Statistics can't be formed, because no answers", HttpStatusCode.BadRequest);
+            return Result<bool>
+                .Failure("Statistics can't be formed, because no answers", HttpStatusCode.BadRequest);
 
         var answers = answersInResult.Data;
         var grouped = answers
@@ -46,22 +50,31 @@ public  class StatisticService(IStatisticRepository statisticRepository, IAnswer
         return Result<bool>.Success(true);
     }
 
-    public async Task UpdateStatistic(UpdateStatisticDto updateStatisticDto)
+    public async Task<Result<bool>> UpdateStatistic(UpdateStatisticDto updateStatisticDto)
     {
         ArgumentNullException.ThrowIfNull(updateStatisticDto, "Update statistic Dto can't be null");
         ArgumentNullException.ThrowIfNull(updateStatisticDto.StatisticId, "Update statistic Id can't be null");
         ArgumentNullException.ThrowIfNull(updateStatisticDto.QuestionId, "QuestionId can't be null");
         ArgumentNullException.ThrowIfNull(updateStatisticDto.TemplateId, "TemplateId can't be null");
+        
         var statistic = StatisticMapping.UpdateStatistic(updateStatisticDto);
         await statisticRepository.UpdateStatistic(statistic);
+        return Result<bool>.Success(true);
     }
 
-    public async Task<List<GetStatisticDto>> GetStatisticsByTemplateId(uint? templateId)
+    public async Task<Result<List<GetStatisticDto>>> GetStatisticsByTemplateId(uint? templateId)
     {
-        ArgumentNullException.ThrowIfNull(templateId, "Template id can't be null");
+        if(templateId == null)
+            return Result<List<GetStatisticDto>>
+                .Failure("Template Id can't be null", HttpStatusCode.BadRequest);
+        
         var statisctic = await statisticRepository.GetStatisticsByTemplateId(templateId.Value);
-        if(!statisctic.Any()) throw new ArgumentException("No statistics found");
+        if(!statisctic.Any()) 
+            return Result<List<GetStatisticDto>>
+                .Failure("No statistics found", HttpStatusCode.NotFound);
+        
         var allStatistic = StatisticMapping.GetStatistic(statisctic);
-        return allStatistic;
+        
+        return Result<List<GetStatisticDto>>.Success(allStatistic);
     }
 }
