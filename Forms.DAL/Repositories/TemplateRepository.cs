@@ -55,6 +55,13 @@ public class TemplateRepository(FormDbContext context):ITemplateRepository
     }
 
     public async Task<List<Template>> GetTemplatesByUserId(uint? userId)
+    {
+        return await context.Templates
+            .AsNoTracking()
+            .Where(template => template.TemplateCreatorId == userId)
+            .ToListAsync();
+    }
+
     public async Task<Template?> GetTemplateById(uint templateId)
     {
         return await context.Templates
