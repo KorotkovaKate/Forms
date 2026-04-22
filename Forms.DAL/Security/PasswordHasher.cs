@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Forms.Application.Interfaces.ISecurity;
 using SHA3.Net;

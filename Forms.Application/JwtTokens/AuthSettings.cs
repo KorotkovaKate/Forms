@@ -1,3 +1,5 @@
+using System;
+
 namespace Forms.Application.JwtTokens;
 
 public class AuthSettings

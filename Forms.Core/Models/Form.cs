@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Forms.Core.Models;
 
 public class Form
