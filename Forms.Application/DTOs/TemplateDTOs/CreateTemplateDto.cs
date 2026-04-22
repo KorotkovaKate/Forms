@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using Forms.Application.DTOs.QuestionDTOs;
 using Forms.Core.Enums;
 
-namespace Forms.Application.DTOs;
+namespace Forms.Application.DTOs.TemplateDTOs;
 
 public class CreateTemplateDto
 {
