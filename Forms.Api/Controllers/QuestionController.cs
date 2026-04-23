@@ -8,59 +8,37 @@ using Microsoft.AspNetCore.Mvc;
 namespace Forms.Controllers;
 [ApiController]
 [Route("Question")]
-public class QuestionController(IQuestionService service):ControllerBase
+public class QuestionController(IQuestionService service): BaseApiController
 {
     [HttpPost("AddQuestion")]
     public async Task<IActionResult> AddQuestion([FromBody] QuestionDto questionDto)
     {
-        try
-        {
-            await service.AddQuestion(questionDto);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await service.AddQuestion(questionDto);
+        
+        return HandleResult(response);
     }
     
     [HttpDelete("DeleteQuestion/{questionId}")]
     public async Task<IActionResult> DeleteQuestion(uint? questionId)
     {
-        try
-        {
-            await service.DeleteQuestion(questionId);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await service.DeleteQuestion(questionId);
+        
+        return HandleResult(response);
     }
+    
     [HttpGet("GetQuestionById/{questionId}")]
     public async Task<IActionResult> GetQuestionById(uint? questionId)
     {
-        try
-        {
-            var question = await service.GetById(questionId);
-            return Ok(question);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await service.GetById(questionId);
+
+        return HandleResult(response);
     }
+    
     [HttpGet("GetQuestionsByTemplateId/{templateId}")]
     public async Task<IActionResult> GetQuestionsByTemplateId(uint? templateId)
     {
-        try
-        {
-            var questions = await service.GetQuestionsByTemplateId(templateId);
-            return Ok(questions);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await service.GetQuestionsByTemplateId(templateId);
+        
+        return HandleResult(response);
     }
 }
