@@ -9,7 +9,7 @@ namespace Forms.Application.Interfaces.IServices;
 public interface IUserService
 {
     public Task<Result<AuthorizationResponseDto>> Authorize(AuthorizationDto authorizationDto);
-    public Task Registrate(RegistrationDto  registrationDto);
+    public Task<Result<bool>> Registrate(RegistrationDto  registrationDto);
     public Task<Result<User>> GetUserById(uint? userId);
     public Task<Result<List<GetAllUsersDto>>> GetAllUsers();
     public Task<Result<bool>> BlockUser(uint? userId);
