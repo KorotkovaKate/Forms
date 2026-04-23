@@ -38,7 +38,7 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, IJw
         return Result<AuthorizationResponseDto>.Success(response);
     }
 
-    public async Task Registrate(RegistrationDto registrationDto)
+    public async Task<Result<bool>> Registrate(RegistrationDto registrationDto)
     {
         if (string.IsNullOrWhiteSpace(registrationDto.Email) || string.IsNullOrWhiteSpace(registrationDto.Password)
                                                              || string.IsNullOrWhiteSpace(registrationDto.Username))
@@ -47,8 +47,9 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, IJw
         }
         var passwordHash = hasher.CalculateHash(registrationDto.Password);
         var user = UserMapping.MapRegistrationDtoToUser(registrationDto,  passwordHash);
-        if (user == null) { throw new Exception("Empty user"); }
+        if (user == null) return Result<bool>.Failure("User is null for registration", HttpStatusCode.BadRequest);
         await repository.Registrate(user);
+        return Result<bool>.Success(true);
     }
 
     public async Task<Result<User>> GetUserById(uint? userId)
@@ -101,7 +102,8 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, IJw
         if(!userInResult.IsSuccess) return Result<bool>.Failure("User not found", HttpStatusCode.NotFound);
         
         var user = userInResult.Data;
-        await repository.AddToAdmin(user);
+        //await repository.AddToAdmin(user);
+        //add method in repo
         return Result<bool>.Success(true);
     }
 
@@ -113,7 +115,8 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, IJw
         if(!userInResult.IsSuccess) return Result<bool>.Failure("User not found", HttpStatusCode.NotFound);
         
         var user = userInResult.Data;
-        await repository.RemoveFromAdmin(user);
+        //await repository.RemoveFromAdmin(user);
+        //add method in repo
         return Result<bool>.Success(true);
     }
 }
