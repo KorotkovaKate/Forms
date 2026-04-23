@@ -8,40 +8,29 @@ using Microsoft.AspNetCore.Mvc;
 namespace Forms.Controllers;
 [ApiController]
 [Route("User")]
-public class UserController(IUserService  userService): ControllerBase
+public class UserController(IUserService  userService): BaseApiController
 {
     [HttpGet("GetAllUsers")]
     public async Task<IActionResult> GetAllUsers()
     {
-        try
-        {
-            var users = await userService.GetAllUsers();
-            return Ok(users);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response  = await userService.GetAllUsers();
+
+        return HandleResult(response);
     }
     
     [HttpPost("Authorize")]
     public async Task<IActionResult> Authorize([FromBody] AuthorizationDto authorizationDto)
-    {
-        try
-        {
-            var response = await userService.Authorize(authorizationDto);
-            
-            return Ok(response);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+    { 
+        var response = await userService.Authorize(authorizationDto);
+        
+        return HandleResult(response);
     }
     
     [HttpPost("Registrate")]
     public async Task<IActionResult> Registrate([FromBody] RegistrationDto registrationDto)
     {
+        
+        var response = await userService.Registrate(registrationDto);
         try
         {
             await userService.Registrate(registrationDto);
