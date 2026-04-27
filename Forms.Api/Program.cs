@@ -1,5 +1,6 @@
 using Forms.Application;
 using Forms.DAL;
+using Forms.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,6 +30,9 @@ services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+services.AddProblemDetails();
+services.AddExceptionHandler<GlobalExceptionHandler>();
 
 var app = builder.Build();
 
