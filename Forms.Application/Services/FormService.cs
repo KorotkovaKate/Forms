@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Forms.Application.Common.Validators.FormValidators;
 using Forms.Application.DTOs.FormDTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Application.Mapping;
 using Forms.Core.Common;
+using Forms.Core.Exceptions;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -15,8 +17,10 @@ public class FormService(IFormRepository repository): IFormService
 {
     public async Task<Result<bool>> CreateForm(CreateFormDto? createFormDto)
     {
-        if (createFormDto == null || createFormDto.SubmitterId == null || createFormDto.TemplateId == null
-            || createFormDto.Answers == null) {throw new ArgumentException("Invalid form");} //flvalid
+        var validator = new CreateFormDtoValidator();
+        var  validationResult = await validator.ValidateAsync(createFormDto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.ToDictionary());
         
         var form = FormMapping.CreateForm(createFormDto);
         await repository.CreateForm(form);
