@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Forms.Application.Common.Validators;
+using Forms.Application.Common.Validators.CommentValidators;
 using Forms.Application.DTOs;
 using Forms.Application.DTOs.CommentDTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Application.Mapping;
 using Forms.Core.Common;
+using Forms.Core.Exceptions;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -16,12 +19,10 @@ public class CommentService(ICommentRepository repository): ICommentService
 {
     public async Task<Result<bool>> AddComment(AddCommentDto? addCommentDto)
     {
-        if (addCommentDto == null || addCommentDto.UserId == null
-                                  || addCommentDto.TemplateId == null
-                                  || string.IsNullOrWhiteSpace(addCommentDto.Text))
-        {
-            throw new ArgumentException("Incorrect comment");
-        } //flvalid
+        var validator = new AddCommentDtoValidator();
+        var validationResult = await validator.ValidateAsync(addCommentDto);
+        if (!validationResult.IsValid) 
+            throw new ValidationException(validationResult.ToDictionary());
         
         var comment = CommentMapping.AddComment(addCommentDto);
         await repository.AddComment(comment);
