@@ -17,7 +17,8 @@ public class LikedTemplateService(ILikedTemplateRepository repository, ITemplate
 {
     public async Task<Result<List<Template>>> GetLikedTemplates(uint? userId)
     {
-        if (userId == null) {throw new ArgumentException("Incorrect user id");} //flvalid
+        if (userId == null)
+            throw new ValidationException("User Id", "User ID is required");
         
         var templates = await repository.GetLikedTemplatesByUserId(userId.Value);
         if (templates.Count == 0) 
