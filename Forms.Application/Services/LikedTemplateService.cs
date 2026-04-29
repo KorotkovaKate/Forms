@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Forms.Application.Common.Validators.LikedTemplateValidators;
 using Forms.Application.DTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Application.Mapping;
 using Forms.Core.Common;
+using Forms.Core.Exceptions;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -44,8 +46,10 @@ public class LikedTemplateService(ILikedTemplateRepository repository, ITemplate
 
     public async Task<Result<bool>> RemoveLikedTemplate(LikedTemplateDto? likedTemplateDto)
     {
-        if(likedTemplateDto.UserId == null) throw new ArgumentException("Incorrect user id"); //flvalid
-        if(likedTemplateDto.TemplateId == null) throw new ArgumentException("Incorrect template id");
+        var validator = new LikedTemplateDtoValidator();
+        var validationResult = await validator.ValidateAsync(likedTemplateDto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.ToDictionary());
         
         var checkLikedTemplate = 
             await repository.GetLikedTemplate(likedTemplateDto.UserId.Value, likedTemplateDto.TemplateId.Value);
