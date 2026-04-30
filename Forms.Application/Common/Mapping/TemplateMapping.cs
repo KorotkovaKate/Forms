@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using Forms.Application.DTOs;
 using Forms.Application.DTOs.TemplateDTOs;
 using Forms.Core.Models;
 
-namespace Forms.Application.Mapping;
+namespace Forms.Application.Common.Mapping;
 
 public class TemplateMapping
 {

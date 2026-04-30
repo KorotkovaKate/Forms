@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using Forms.Application.DTOs;
 using Forms.Core.Models;
 
-namespace Forms.Application.Mapping;
+namespace Forms.Application.Common.Mapping;
 
 public static class UserMapping
 {

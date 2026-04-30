@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Forms.Application.Common.Mapping;
 using Forms.Application.Common.Validators.LikedTemplateValidators;
 using Forms.Application.DTOs;
 using Forms.Application.Interfaces.IServices;
@@ -29,8 +30,13 @@ public class LikedTemplateService(ILikedTemplateRepository repository, ITemplate
 
     public async Task<Result<bool>> AddLikedTemplate(LikedTemplateDto? likedTemplateDto)
     {
-        if(likedTemplateDto.UserId == null) throw new ArgumentException("Incorrect user id"); //flvalid
-        if(likedTemplateDto.TemplateId == null) throw new ArgumentException("Incorrect template id");
+        if(likedTemplateDto == null)
+            return Result<bool>.Failure("Bad Request", HttpStatusCode.BadRequest);
+        
+        var validator = new LikedTemplateDtoValidator();
+        var validationResult = await validator.ValidateAsync(likedTemplateDto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.ToDictionary());
         
         var checkLikedTemplate = 
             await repository.GetLikedTemplate(likedTemplateDto.UserId.Value, likedTemplateDto.TemplateId.Value);
