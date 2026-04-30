@@ -13,9 +13,10 @@ namespace Forms.Application.Services;
 
 public class QuestionOptionService(IQuestionOptionRepository repository):IQuestionOptionService
 {
+    private const string FieldNullErrorMessage = "The field can't be null";
     public async Task<Result<List<QuestionOption>>> GetOptionsByQuestionId(uint? questionId)
     {
-        if (questionId == null) {throw new ArgumentNullException("Incorrect question ID");} //flvalid
+        if (questionId == null) {throw new ValidationException("questionId", FieldNullErrorMessage);}
         
         var options = await repository.GetOptionsByQuestionId(questionId.Value);
         if (options.Count == 0)
@@ -26,9 +27,13 @@ public class QuestionOptionService(IQuestionOptionRepository repository):IQuesti
 
     public async Task<Result<bool>> AddOption(AddOptionDto? addOptionDto)
     {
-        if (addOptionDto is null) throw new ArgumentNullException("Input data can't be null"); //flvalid
-        if (string.IsNullOrWhiteSpace(addOptionDto.Value)) throw new ArgumentException("Incorrect value"); 
-        if (addOptionDto.QuestionId == null) throw new ArgumentException("Incorrect question ID");
+        if(addOptionDto == null)
+            return Result<bool>.Failure("Bad Request", HttpStatusCode.BadRequest);
+        
+        var validator = new AddOptionDtoValidator();
+        var validationResult = await validator.ValidateAsync(addOptionDto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.ToDictionary());
         
         var questionOption = QuestionOptionMapping.AddOption(addOptionDto);
         await repository.AddOption(questionOption);
@@ -37,7 +42,7 @@ public class QuestionOptionService(IQuestionOptionRepository repository):IQuesti
 
     public async Task<Result<bool>> DeleteOption(uint? questionOptionId)
     {
-        if (questionOptionId == null) throw new ArgumentNullException("Incorrect question ID"); //flvalid
+        if (questionOptionId == null) throw new ValidationException("questionOptionId", FieldNullErrorMessage);
         
         var questionOptionResult = await GetOptionById(questionOptionId);
         if (!questionOptionResult.IsSuccess) 
@@ -50,7 +55,8 @@ public class QuestionOptionService(IQuestionOptionRepository repository):IQuesti
 
     public async Task<Result<QuestionOption>> GetOptionById(uint? questionOptionId)
     {
-        if (questionOptionId == null) {throw new ArgumentNullException(nameof(questionOptionId));} //flvalid
+        if (questionOptionId == null)
+            throw new ValidationException("questionOptionId", FieldNullErrorMessage);
         
         var questionOption = await repository.GetOptionById(questionOptionId.Value);
         if (questionOption == null) 
