@@ -1,7 +1,7 @@
 using Forms.Application.DTOs.QuestionDTOs;
 using Forms.Core.Models;
 
-namespace Forms.Application.Mapping;
+namespace Forms.Application.Common.Mapping;
 
 public class QuestionOptionMapping
 {

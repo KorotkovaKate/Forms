@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using Forms.Application.DTOs;
 using Forms.Application.DTOs.CommentDTOs;
 using Forms.Core.Models;
 
-namespace Forms.Application.Mapping;
+namespace Forms.Application.Common.Mapping;
 
 public class CommentMapping
 {

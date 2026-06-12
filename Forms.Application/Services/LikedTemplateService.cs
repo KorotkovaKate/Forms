@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Forms.Application.Common.Mapping;
+using Forms.Application.Common.Validators.LikedTemplateValidators;
 using Forms.Application.DTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Application.Mapping;
 using Forms.Core.Common;
+using Forms.Core.Exceptions;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -15,7 +18,8 @@ public class LikedTemplateService(ILikedTemplateRepository repository, ITemplate
 {
     public async Task<Result<List<Template>>> GetLikedTemplates(uint? userId)
     {
-        if (userId == null) {throw new ArgumentException("Incorrect user id");} //flvalid
+        if (userId == null)
+            throw new ValidationException("User Id", "User ID is required");
         
         var templates = await repository.GetLikedTemplatesByUserId(userId.Value);
         if (templates.Count == 0) 
@@ -26,8 +30,13 @@ public class LikedTemplateService(ILikedTemplateRepository repository, ITemplate
 
     public async Task<Result<bool>> AddLikedTemplate(LikedTemplateDto? likedTemplateDto)
     {
-        if(likedTemplateDto.UserId == null) throw new ArgumentException("Incorrect user id"); //flvalid
-        if(likedTemplateDto.TemplateId == null) throw new ArgumentException("Incorrect template id");
+        if(likedTemplateDto == null)
+            return Result<bool>.Failure("Bad Request", HttpStatusCode.BadRequest);
+        
+        var validator = new LikedTemplateDtoValidator();
+        var validationResult = await validator.ValidateAsync(likedTemplateDto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.ToDictionary());
         
         var checkLikedTemplate = 
             await repository.GetLikedTemplate(likedTemplateDto.UserId.Value, likedTemplateDto.TemplateId.Value);
@@ -44,8 +53,10 @@ public class LikedTemplateService(ILikedTemplateRepository repository, ITemplate
 
     public async Task<Result<bool>> RemoveLikedTemplate(LikedTemplateDto? likedTemplateDto)
     {
-        if(likedTemplateDto.UserId == null) throw new ArgumentException("Incorrect user id"); //flvalid
-        if(likedTemplateDto.TemplateId == null) throw new ArgumentException("Incorrect template id");
+        var validator = new LikedTemplateDtoValidator();
+        var validationResult = await validator.ValidateAsync(likedTemplateDto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.ToDictionary());
         
         var checkLikedTemplate = 
             await repository.GetLikedTemplate(likedTemplateDto.UserId.Value, likedTemplateDto.TemplateId.Value);
