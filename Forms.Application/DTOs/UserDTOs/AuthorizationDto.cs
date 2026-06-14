@@ -1,6 +1,4 @@
-using Forms.Core.Enums;
-
-namespace Forms.Application.DTOs;
+namespace Forms.Application.DTOs.UserDTOs;
 
 public class AuthorizationDto
 {

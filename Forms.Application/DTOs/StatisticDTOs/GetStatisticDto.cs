@@ -1,4 +1,4 @@
-namespace Forms.Application.DTOs;
+namespace Forms.Application.DTOs.StatisticDTOs;
 
 public class GetStatisticDto
 {
