@@ -14,6 +14,7 @@ public class FormMapping
             TemplateId = createFormDto.TemplateId.Value,
             Answers = createFormDto.Answers.Select(answer => new Answer
             {
+                QuestionId = answer.QuestionId.Value,
                 Value = answer.Value,
             }).ToList()
         };
