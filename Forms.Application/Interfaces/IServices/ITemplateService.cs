@@ -18,4 +18,5 @@ public interface ITemplateService
     public Task<Result<Template>> GetTemplateById(uint? templateId);
     public Task<Result<bool>> IncreaseLikeNumber(uint? templateId);
     public Task<Result<bool>> DecreaseLikeNumber(uint? templateId);
+    public Result<List<GetTemplateThemesDto>> GetTemplateThemes();
 }
