@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using Forms.Application.Common.Mapping;
 using Forms.Application.Common.Validators.FormValidators;
 using Forms.Application.DTOs.FormDTOs;
@@ -14,7 +11,7 @@ using Forms.Core.Models;
 
 namespace Forms.Application.Services;
 
-public class FormService(IFormRepository repository): IFormService 
+public class FormService(IFormRepository repository, IStatisticService statisticService): IFormService 
 {
     public async Task<Result<bool>> CreateForm(CreateFormDto? createFormDto)
     {
@@ -25,6 +22,8 @@ public class FormService(IFormRepository repository): IFormService
         
         var form = FormMapping.CreateForm(createFormDto);
         await repository.CreateForm(form);
+
+        await statisticService.RecalculateTemplateStatistics(form.TemplateId);
         
         return Result<bool>.Success(true);
     }
