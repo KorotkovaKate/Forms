@@ -1,4 +1,5 @@
 using Forms.Application.DTOs;
+using Forms.Application.DTOs.StatisticDTOs;
 using Forms.Core.Models;
 
 namespace Forms.Application.Common.Mapping;
@@ -23,11 +24,10 @@ public class StatisticMapping
             var statisticDto = new GetStatisticDto
             {
                 StatisticId = statistic.Id,
+                QuestionId = statistic.QuestionId,
+                TemplateId = statistic.TemplateId,
                 MostCommonAnswer = statistic.MostCommonAnswer,
                 AnswerFrequencyInPercent = statistic.AnswerFrequencyInPercent,
-                TemplateTitle = statistic.Template.Title,
-                ImageUrl = statistic.Template.ImageUrl,
-                QuestionTitle = statistic.Question.Title,
             };
             allStatistic.Add(statisticDto);
         }
