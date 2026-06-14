@@ -1,4 +1,5 @@
 using Forms.Application.DTOs;
+using Forms.Application.DTOs.UserDTOs;
 using Forms.Application.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,56 +29,31 @@ public class UserController(IUserService  userService): BaseApiController
     {
         
         var response = await userService.Registrate(registrationDto);
-        try
-        {
-            await userService.Registrate(registrationDto);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+
+        return HandleResult(response);
     }
     
-    [HttpGet("GetUserById/{id}")]
+    [HttpGet("GetUserById/{userId}")]
     public async Task<IActionResult> GetUserById([FromRoute] uint? userId)
-    {
-        try
-        {
-            var user = await userService.GetUserById(userId);
-            return Ok(user);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+    { 
+        var response = await userService.GetUserById(userId); 
+        
+        return HandleResult(response);
     }
     
     [HttpPost("BlockUser")]
     public async Task<IActionResult> BlockUser([FromBody] uint? userId)
     {
-        try
-        {
-            await userService.BlockUser(userId);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await userService.BlockUser(userId);
+        
+        return HandleResult(response);
     }
     
     [HttpPost("ActivateUser")]
     public async Task<IActionResult> ActivateUser([FromBody] uint? userId)
     {
-        try
-        {
-            await userService.ActivateUser(userId);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await userService.ActivateUser(userId);
+        
+        return HandleResult(response);
     }
 }
