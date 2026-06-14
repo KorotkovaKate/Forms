@@ -50,4 +50,16 @@ public class UserRepository(FormDbContext context): IUserRepository
         user.Status = UserStatus.Active;
         await context.SaveChangesAsync();
     }
+
+    public async Task AddUserToAdmin(User user)
+    {
+        user.Role = UserRole.Admin;
+        await context.SaveChangesAsync();
+    }
+    
+    public async Task RemoveUserFromAdmin(User user)
+    {
+        user.Role = UserRole.User;
+        await context.SaveChangesAsync();
+    }
 }
