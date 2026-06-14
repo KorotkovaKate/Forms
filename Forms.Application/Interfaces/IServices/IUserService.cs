@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Forms.Application.DTOs;
+using Forms.Application.DTOs.UserDTOs;
 using Forms.Core.Common;
 using Forms.Core.Models;
 

@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Forms.Application.Common.Mapping;
 using Forms.Application.DTOs;
+using Forms.Application.DTOs.UserDTOs;
 using Forms.Application.Interfaces.ISecurity;
 using Forms.Application.Interfaces.IServices;
 using Forms.Application.Mapping;

@@ -1,4 +1,5 @@
 using Forms.Application.DTOs;
+using Forms.Application.DTOs.UserDTOs;
 using Forms.Core.Models;
 
 namespace Forms.Application.Common.Mapping;
@@ -36,7 +37,6 @@ public static class UserMapping
     {
         return new AuthorizationResponseDto
         {
-            UserId = userId,
             Token = token
         };
     }
