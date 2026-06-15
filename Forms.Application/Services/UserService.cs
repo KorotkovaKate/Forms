@@ -1,11 +1,13 @@
 using System.Net;
 using Forms.Application.Common.Mapping;
+using Forms.Application.Common.Validators.UserValidators;
 using Forms.Application.DTOs;
 using Forms.Application.DTOs.UserDTOs;
 using Forms.Application.Interfaces.ISecurity;
 using Forms.Application.Interfaces.IServices;
 using Forms.Core.Common;
 using Forms.Core.Enums;
+using Forms.Core.Exceptions;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -15,10 +17,11 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, IJw
 {
     public async Task<Result<AuthorizationResponseDto>> Authorize(AuthorizationDto authorizationDto)
     {
-        if (string.IsNullOrWhiteSpace(authorizationDto.Email) || string.IsNullOrWhiteSpace(authorizationDto.Password))
-        {
-            throw new ArgumentException("Email or password are empty");
-        }
+        var validator = new AuthorizationDtoValidator();
+        var validationResult = await validator.ValidateAsync(authorizationDto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.ToDictionary());
+        
         var passwordHash = hasher.CalculateHash(authorizationDto.Password);
         var user = await repository.Authorize(authorizationDto.Email, passwordHash);
         if (user == null)
