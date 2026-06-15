@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using Forms.Application.Common.Mapping;
 using Forms.Application.DTOs;
+using Forms.Application.DTOs.UserDTOs;
 using Forms.Application.Interfaces.ISecurity;
 using Forms.Application.Interfaces.IServices;
-using Forms.Application.Mapping;
 using Forms.Core.Common;
 using Forms.Core.Enums;
 using Forms.Core.Interfaces.IRepositories;
@@ -95,7 +92,7 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, IJw
         return Result<bool>.Success(true);
     }
 
-    public async Task<Result<bool>> AddToAdmin(uint? userId)
+    public async Task<Result<bool>> AddUserToAdmin(uint? userId)
     {
         if  (userId == null) return Result<bool>.Failure("Incorrect user id", HttpStatusCode.BadRequest);
         
@@ -103,12 +100,12 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, IJw
         if(!userInResult.IsSuccess) return Result<bool>.Failure("User not found", HttpStatusCode.NotFound);
         
         var user = userInResult.Data;
-        //await repository.AddToAdmin(user);
-        //add method in repo
+        await repository.AddUserToAdmin(user);
+        
         return Result<bool>.Success(true);
     }
 
-    public async Task<Result<bool>> RemoveFromAdmin(uint? userId)
+    public async Task<Result<bool>> RemoveUserFromAdmin(uint? userId)
     {
         if  (userId == null) return Result<bool>.Failure("Incorrect user id", HttpStatusCode.BadRequest);
         
@@ -116,8 +113,8 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, IJw
         if(!userInResult.IsSuccess) return Result<bool>.Failure("User not found", HttpStatusCode.NotFound);
         
         var user = userInResult.Data;
-        //await repository.RemoveFromAdmin(user);
-        //add method in repo
+        await repository.RemoveUserFromAdmin(user);
+        
         return Result<bool>.Success(true);
     }
 }

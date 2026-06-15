@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Forms.Application.DTOs;
+using Forms.Application.DTOs.UserDTOs;
 using Forms.Core.Common;
 using Forms.Core.Models;
 
@@ -14,6 +13,6 @@ public interface IUserService
     public Task<Result<List<GetAllUsersDto>>> GetAllUsers();
     public Task<Result<bool>> BlockUser(uint? userId);
     public Task<Result<bool>> ActivateUser(uint? userId);
-    public Task<Result<bool>> AddToAdmin(uint? userId);
-    public Task<Result<bool>> RemoveFromAdmin(uint? userId);
+    public Task<Result<bool>> AddUserToAdmin(uint? userId);
+    public Task<Result<bool>> RemoveUserFromAdmin(uint? userId);
 }

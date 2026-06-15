@@ -9,6 +9,8 @@ using Forms.Application.DTOs.TemplateDTOs;
 using Forms.Application.Interfaces.IServices;
 using Forms.Application.Mapping;
 using Forms.Core.Common;
+using Forms.Core.Enums;
+using Forms.Core.Exceptions;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -16,15 +18,15 @@ namespace Forms.Application.Services;
 
 public class TemplateService(ITemplateRepository repository):ITemplateService
 {
+    private const string FieldNullOrEmptyErrorMessage = "Field cannot be null or empty"; 
+    
     public async Task<Result<bool>> CreateTemplate(CreateTemplateDto? createTemplateDto)
     {
         if (createTemplateDto == null)
-            return Result<bool>
-                .Failure("Empty template is error", HttpStatusCode.BadRequest);
+            throw new ValidationException("createTemplateDto", FieldNullOrEmptyErrorMessage);
         
         if (string.IsNullOrWhiteSpace(createTemplateDto.Title) ||
-            string.IsNullOrWhiteSpace(createTemplateDto.Description) || 
-            string.IsNullOrWhiteSpace(createTemplateDto.Theme))
+            string.IsNullOrWhiteSpace(createTemplateDto.Description))
         {
             return Result<bool>.Failure("Bad data in response", HttpStatusCode.BadRequest);
         }
@@ -49,7 +51,7 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
         return Result<bool>.Success(true);
     }
 
-    public async Task<Result<bool>> UpdateTemplate(UpdateTemplateDto?  updateTemplateDto)
+    async Task<Result<bool>> ITemplateService.UpdateTemplate(UpdateTemplateDto?  updateTemplateDto)
     {
         if (updateTemplateDto.TemplateId == null
             || string.IsNullOrWhiteSpace(updateTemplateDto.Title)
@@ -137,5 +139,19 @@ public class TemplateService(ITemplateRepository repository):ITemplateService
         var template = templateResult.Data;
         await repository.DecreaseLikeNumber(template);
         return Result<bool>.Success(true);
+    }
+
+    public Result<List<GetTemplateThemesDto>> GetTemplateThemes()
+    {
+        var themes = Enum.GetValues(typeof(ThemeType))
+            .Cast<ThemeType>()
+            .Select(theme => new GetTemplateThemesDto
+            {
+                Id = (uint)theme,
+                Name = theme.ToString()
+            })
+            .ToList();
+        
+        return Result<List<GetTemplateThemesDto>>.Success(themes);
     }
 }
