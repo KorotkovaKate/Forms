@@ -41,11 +41,11 @@ public class UserService(IUserRepository repository, IPasswordHasher hasher, IJw
 
     public async Task<Result<bool>> Registrate(RegistrationDto registrationDto)
     {
-        if (string.IsNullOrWhiteSpace(registrationDto.Email) || string.IsNullOrWhiteSpace(registrationDto.Password)
-                                                             || string.IsNullOrWhiteSpace(registrationDto.Username))
-        {
-            throw new  ArgumentException("Email, password or username are empty");
-        }
+        var validator = new RegistrationDtoValidator();
+        var validationResult = await validator.ValidateAsync(registrationDto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.ToDictionary());
+        
         var passwordHash = hasher.CalculateHash(registrationDto.Password);
         var user = UserMapping.MapRegistrationDtoToUser(registrationDto,  passwordHash);
         if (user == null) return Result<bool>.Failure("User is null for registration", HttpStatusCode.BadRequest);
