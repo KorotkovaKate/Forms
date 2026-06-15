@@ -22,4 +22,9 @@
         <Using Include="Xunit" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Forms.Application\Forms.Application.csproj" />
+      <ProjectReference Include="..\Forms.Core\Forms.Core.csproj" />
+    </ItemGroup>
+
 </Project>
