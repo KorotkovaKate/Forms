@@ -1,6 +1,10 @@
+using System.Net;
+using Forms.Application.Common.Mapping;
+using Forms.Application.Common.Validators.QuestionValidators;
 using Forms.Application.DTOs.QuestionDTOs;
 using Forms.Application.Interfaces.IServices;
-using Forms.Application.Mapping;
+using Forms.Core.Common;
+using Forms.Core.Exceptions;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 
@@ -8,37 +12,56 @@ namespace Forms.Application.Services;
 
 public class QuestionService(IQuestionRepository repository): IQuestionService
 {
-    public async Task AddQuestion(QuestionDto questionDto)
+    private const string FieldNullOrEmptyErrorMessage = "The field can't be null or empty";
+    public async Task<Result<bool>> AddQuestion(QuestionDto? questionDto)
     {
-        ArgumentNullException.ThrowIfNull(questionDto);
-        if (string.IsNullOrWhiteSpace(questionDto.Title))
-        {
-            throw new ArgumentException("Incorrect question title or template id");
-        }
+        if(questionDto == null)
+            return Result<bool>.Failure("Bad Request", HttpStatusCode.BadRequest);
+
+        var validator = new QuestionDtoValidator();
+        var validationResult = await validator.ValidateAsync(questionDto);
+        if(!validationResult.IsValid)
+            throw new ValidationException(validationResult.ToDictionary());
+        
         var question = QuestionMapping.AddQuestion(questionDto);
         await repository.AddQuestion(question);
+        return Result<bool>.Success(true);
     }
 
-    public async Task DeleteQuestion(uint? questionId)
+    public async Task<Result<bool>> DeleteQuestion(uint? questionId)
     {
-        ArgumentNullException.ThrowIfNull(questionId, "Question id can't be null");
-        var question = await GetById(questionId);
+        if(questionId == null)
+            throw new ValidationException("questionId", FieldNullOrEmptyErrorMessage);
+        
+        var questionResult = await GetById(questionId);
+        if(!questionResult.IsSuccess) return Result<bool>.Failure(questionResult.ErrorMessage, HttpStatusCode.NotFound);
+        
+        var question = questionResult.Data;
         await repository.DeleteQuestion(question);
+        return Result<bool>.Success(true);
     }
 
-    public async Task<Question> GetById(uint? questionId)
+    public async Task<Result<Question>> GetById(uint? questionId)
     {
-        ArgumentNullException.ThrowIfNull(questionId, "Question id is null");
+        if(questionId == null)
+            throw new ValidationException("questionId", FieldNullOrEmptyErrorMessage);
+
         var question = await repository.GetById(questionId.Value);
-        ArgumentNullException.ThrowIfNull(question, "question not found");
-        return question;
+        if  (question == null) 
+            return Result<Question>.Failure("Question not found", HttpStatusCode.NotFound);
+        
+        return Result<Question>.Success(question);
     }
 
-    public async Task<List<Question>> GetQuestionsByTemplateId(uint? templateId)
+    public async Task<Result<List<Question>>> GetQuestionsByTemplateId(uint? templateId)
     {
-        ArgumentNullException.ThrowIfNull(templateId, "Template id can't be null");
+        if(templateId == null)
+            throw new ValidationException("templateId", FieldNullOrEmptyErrorMessage);
+
         var questions = await repository.GetQuestionsByTemplateId(templateId.Value);
-        if(!questions.Any()) throw new ArgumentException("No questions found");
-        return questions;
+        if(questions.Count == 0) 
+            return Result<List<Question>>.Failure("No questions found", HttpStatusCode.NotFound);
+        
+        return Result<List<Question>>.Success(questions);
     }
 }

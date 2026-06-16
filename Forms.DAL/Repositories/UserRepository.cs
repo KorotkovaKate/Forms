@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Forms.Core.Enums;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
@@ -44,6 +48,18 @@ public class UserRepository(FormDbContext context): IUserRepository
     public async Task ActivateUser(User user)
     {
         user.Status = UserStatus.Active;
+        await context.SaveChangesAsync();
+    }
+
+    public async Task AddUserToAdmin(User user)
+    {
+        user.Role = UserRole.Admin;
+        await context.SaveChangesAsync();
+    }
+    
+    public async Task RemoveUserFromAdmin(User user)
+    {
+        user.Role = UserRole.User;
         await context.SaveChangesAsync();
     }
 }

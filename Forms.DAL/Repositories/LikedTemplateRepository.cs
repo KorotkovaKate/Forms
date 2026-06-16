@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +9,7 @@ namespace Forms.DAL.Repositories;
 
 public class LikedTemplateRepository(FormDbContext context): ILikedTemplateRepository
 {
-    public async Task<List<Template>?> GetLikedTemplatesByUserId(uint userId)
+    public async Task<List<Template>> GetLikedTemplatesByUserId(uint userId)
     {
         return await context.LikedTemplates
             .Where(likedTemplates => likedTemplates.UserId == userId)

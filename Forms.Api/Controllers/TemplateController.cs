@@ -1,115 +1,89 @@
 using Forms.Application.DTOs;
+using Forms.Application.DTOs.TemplateDTOs;
 using Forms.Application.Interfaces.IServices;
-using Forms.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Forms.Controllers;
 [ApiController]
 [Route("Template")]
-public class TemplateController(ITemplateService service): ControllerBase
+public class TemplateController(ITemplateService service): BaseApiController
 {
     [HttpPost("CreateTemplate")]
     public async Task<IActionResult> CreateTemplate([FromBody] CreateTemplateDto createTemplateDto)
-    {
-        try
-        {
-            await service.CreateTemplate(createTemplateDto);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+    { 
+        var response = await service.CreateTemplate(createTemplateDto); 
+        
+        return HandleResult(response);
     }
+    
     [HttpPut("UpdateTemplate/{templateId}")]
     public async Task<IActionResult> UpdateTemplate([FromBody] UpdateTemplateDto  updateTemplateDto)
     {
-        try
-        {
-            await service.UpdateTemplate(updateTemplateDto);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+            var response = await service.UpdateTemplate(updateTemplateDto);
+           
+            return HandleResult(response);
     }
+    
     [HttpDelete("DeleteTemplate/{templateId}")]
     public async Task<IActionResult> DeleteTemplate(uint? templateId)
     {
-        try
-        {
-            await service.DeleteTemplate(templateId);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await service.DeleteTemplate(templateId);
+            
+        return HandleResult(response);
     }
+    
     [HttpGet("GetAllTemplates")]
     public async Task<IActionResult> GetAllTemplates()
     {
-        try
-        {
-            var templates = await service.GetAllTemplates();
-            return Ok(templates);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = await service.GetAllTemplates();
+            
+        return HandleResult(response);
     }
     [HttpGet("GetAllPublicTemplates")]
     public async Task<IActionResult> GetAllPublicTemplates()
-    {
-        try
-        {
-            var publicTemplates = await service.GetAllPublicTemplates();
-            return Ok(publicTemplates);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+    { 
+        var response = await service.GetAllPublicTemplates();
+        
+        return HandleResult(response);
     }
+    
     [HttpGet("GetTemplateById/{templateId}")]
     public async Task<IActionResult> GetTemplateById(uint? templateId)
-    {
-        try
-        {
-            var template = await service.GetTemplateById(templateId);
-            return Ok(template);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+    { 
+        var response = await service.GetTemplateById(templateId);
+        
+        return HandleResult(response);
     }
+
+    [HttpGet("GetTemplatesByUserId/{userId}")]
+    public async Task<IActionResult> GetTemplatesByUserId(uint? userId)
+    {
+        var response = await service.GetTemplatesByUserId(userId);
+        
+        return HandleResult(response);
+    }
+        
     [HttpPatch("IncreaseLikeNumber/{templateId}")]
     public async Task<IActionResult> IncreaseLikeNumber(uint? templateId)
     {
-        try
-        {
-            await service.IncreaseLikeNumber(templateId);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+            var response = await service.IncreaseLikeNumber(templateId);
+            
+            return HandleResult(response);
     }
+    
     [HttpPatch("DecreaseLikeNumber/{templateId}")]
     public async Task<IActionResult> DecreaseLikeNumber(uint? templateId)
+    { 
+        var response = await service.DecreaseLikeNumber(templateId); 
+        
+        return HandleResult(response);
+    }
+
+    [HttpGet("GetTemplateThemes")]
+    public async Task<IActionResult> GetTemplateThemes()
     {
-        try
-        {
-            await service.DecreaseLikeNumber(templateId);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var response = service.GetTemplateThemes();
+        
+        return HandleResult(response);
     }
 }

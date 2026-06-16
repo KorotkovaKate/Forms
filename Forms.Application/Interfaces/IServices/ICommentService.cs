@@ -1,14 +1,17 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Forms.Application.DTOs;
 using Forms.Application.DTOs.CommentDTOs;
+using Forms.Core.Common;
 using Forms.Core.Models;
 
 namespace Forms.Application.Interfaces.IServices;
 
 public interface ICommentService
 {
-    public Task AddComment(AddCommentDto addCommentDto);
-    public Task DeleteComment(uint? comment);
-    public Task<Comment> GetCommentById(uint? commentId);
-    public Task UpdateComment(UpdateCommentDto updateCommentDto);
-    public Task<List<GetAllCommentsByTemplateIdDto>> GetAllCommentsByTemplateId(uint? templateId);
+    public Task<Result<bool>> AddComment(AddCommentDto? addCommentDto);
+    public Task<Result<bool>> DeleteComment(uint? comment);
+    public Task<Result<Comment>> GetCommentById(uint? commentId);
+    public Task<Result<bool>> UpdateComment(UpdateCommentDto? updateCommentDto);
+    public Task<Result<List<GetAllCommentsByTemplateIdDto>>> GetAllCommentsByTemplateId(uint? templateId);
 }

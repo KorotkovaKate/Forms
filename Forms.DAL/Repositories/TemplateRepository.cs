@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Forms.Core.Enums;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
@@ -49,9 +53,17 @@ public class TemplateRepository(FormDbContext context):ITemplateRepository
             .ToListAsync();
     }
 
-    public async Task<List<Template>?> GetAllTemplates()
+    public async Task<List<Template>> GetAllTemplates()
     {
         return await context.Templates.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<List<Template>> GetTemplatesByUserId(uint? userId)
+    {
+        return await context.Templates
+            .AsNoTracking()
+            .Where(template => template.TemplateCreatorId == userId)
+            .ToListAsync();
     }
 
     public async Task<Template?> GetTemplateById(uint templateId)

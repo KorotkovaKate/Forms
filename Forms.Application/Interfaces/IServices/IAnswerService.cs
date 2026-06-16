@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Forms.Application.DTOs.AnswerDTOs;
+using Forms.Core.Common;
 using Forms.Core.Models;
 
 namespace Forms.Application.Interfaces.IServices;
@@ -6,6 +9,6 @@ namespace Forms.Application.Interfaces.IServices;
 public interface 
     IAnswerService
 {
-    public Task<List<Answer>> GetAnswersByFormId(uint? formId);
-    public Task<List<Answer>> GetAnswersByQuestionId(uint? questionId);
+    public Task<Result<List<Answer>>> GetAnswersByFormId(uint? formId);
+    public Task<Result<List<Answer>>> GetAnswersByQuestionId(uint? questionId);
 }

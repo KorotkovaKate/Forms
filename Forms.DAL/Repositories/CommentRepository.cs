@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Forms.Core.Interfaces.IRepositories;
 using Forms.Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -44,7 +48,7 @@ public class CommentRepository(FormDbContext context): ICommentRepository
         }
     }
 
-    public async Task<List<Comment>?> GetAllCommentsByTemplateId(uint templateId)
+    public async Task<List<Comment>> GetAllCommentsByTemplateId(uint templateId)
     {
         return await context.Comments
             .AsNoTracking()
